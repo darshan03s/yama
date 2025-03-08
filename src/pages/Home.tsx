@@ -44,8 +44,8 @@ const Home: React.FC = () => {
             className='max-w-6xl mx-auto'>
             <h1 className='text-3xl text-amber-500 py-1 mb-2'>Discover</h1>
             <div className="media-cards sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 py-2">
-                {currentList.map((item: any) => (
-                    <MediaCard item={item} mediaType={mediaType} />
+                {currentList.map((item: any, index: number) => (
+                    <MediaCard item={item} mediaType={mediaType} key={index} />
                 ))}
             </div>
         </div>
