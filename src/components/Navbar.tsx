@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Category } from "../types";
 
 interface NavItemProps {
     name: string;
@@ -24,14 +25,15 @@ const NavItem: React.FC<NavItemProps> = ({ name, to, isActive }) => {
 const Navbar: React.FC = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const category = searchParams.get("category");
-
+    const category = (searchParams.get("category") as Category) || "movie";
     return (
         <nav className="bg-amber-300 p-2 flex items-center justify-center">
             <div className="nav-items flex items-center gap-4">
-                <NavItem name="Movies" to="/" isActive={location.pathname === "/" && !category} />
+                <NavItem name="Movies" to="/" isActive={location.pathname === "/" && category === "movie"} />
                 <NavItem name="TV Shows" to="/?category=tv" isActive={category === "tv"} />
-                <NavItem name="Trending" to="/?category=trending" isActive={category === "trending"} />
+                <NavItem name="Now playing" to="/?category=now_playing" isActive={category === "now_playing"} />
+                <NavItem name="Top rated" to="/?category=top_rated" isActive={category === "top_rated"} />
+                <NavItem name="Upcoming" to="/?category=upcoming" isActive={category === "upcoming"} />
             </div>
         </nav>
     );

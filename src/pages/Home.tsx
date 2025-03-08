@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import MediaCard from "../components/MediaCard";
 import { useRootContext } from "../Context";
-
-type Category = "movie" | "tv";
+import { Category } from "../types";
 
 const Home: React.FC = () => {
     const location = useLocation();
@@ -20,6 +19,12 @@ const Home: React.FC = () => {
             url += "discover/movie?include_adult=false";
         } else if (category === "tv") {
             url += "discover/tv?include_adult=false";
+        } else if (category === "now_playing") {
+            url += "movie/now_playing?include_adult=false";
+        } else if (category === "top_rated") {
+            url += "movie/top_rated?include_adult=false";
+        } else if (category === "upcoming") {
+            url += "movie/upcoming?include_adult=false";
         }
 
         const options = {
@@ -56,7 +61,7 @@ const Home: React.FC = () => {
             <h1 className="text-3xl text-amber-500 py-1 mb-2">Discover</h1>
             <div className="media-cards sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 py-2">
                 {currentList.map((item: any, index: number) => (
-                    <MediaCard item={item} category={category} key={index} />
+                    <MediaCard item={item} key={index} />
                 ))}
             </div>
         </div>

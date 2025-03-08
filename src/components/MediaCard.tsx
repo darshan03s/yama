@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom'
 
 interface MediaCardProps {
     item: any
-    category: string
 }
 
-const MediaCard: React.FC<MediaCardProps> = ({ item, category }) => {
+const MediaCard: React.FC<MediaCardProps> = ({ item }) => {
     return (
         <div className="media-card bg-amber-200 rounded-md hover:scale-105 transition-all duration-300" key={item.id}>
-            <Link to={`/${category}/${item.id}`} key={item.id} className='relative'>
+            <Link to={`/${item.id}`} key={item.id} className='relative'>
                 <img
                     src={`https://image.tmdb.org/t/p/original${item.poster_path || item.backdrop_path}`}
                     alt={item.title}
