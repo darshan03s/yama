@@ -1,17 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-
-const Header: React.FC = () => {
-  return (
-    <div className='text-3xl flex justify-center items-center w-full'>Header</div>
-  )
-}
-
-const Home: React.FC = () => {
-  return (
-    <div className='text-3xl flex justify-center items-center w-full h-[80vh]'>App</div>
-  )
-}
+import Home from './pages/Home'
+import Header from './components/Header'
 
 const App: React.FC = () => {
   return (
