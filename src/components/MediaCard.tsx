@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom'
 
 interface MediaCardProps {
     item: any
-    mediaType: string
+    category: string
 }
 
-const MediaCard: React.FC<MediaCardProps> = ({ item, mediaType }) => {
+const MediaCard: React.FC<MediaCardProps> = ({ item, category }) => {
     return (
         <div className="media-card bg-amber-200 rounded-md hover:scale-105 transition-all duration-300" key={item.id}>
-            <Link to={`/${mediaType}/${item.id}`} key={item.id} className='relative'>
+            <Link to={`/${category}/${item.id}`} key={item.id} className='relative'>
                 <img
                     src={`https://image.tmdb.org/t/p/original${item.poster_path || item.backdrop_path}`}
                     alt={item.title}
@@ -23,7 +23,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, mediaType }) => {
             </Link>
 
             <div className="info p-1">
-                <h2 className='text-center text-lg truncate font-medium'>{item.title}</h2>
+                <h2 className='text-center text-lg truncate font-medium'>{item.title || item.name}</h2>
                 <div className="text-center text-xs">{item.release_date || item.first_air_date}</div>
             </div>
         </div>

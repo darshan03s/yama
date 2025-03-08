@@ -2,9 +2,10 @@ import { createContext, ReactNode, useContext, useState } from "react";
 
 interface ContextType {
     data: {
-        discover: any[];  
+        movie: any[];
+        tv: any[];
     };
-    setData: React.Dispatch<React.SetStateAction<{ discover: any[] }>>;
+    setData: React.Dispatch<React.SetStateAction<{ movie: any[], tv: any[] }>>;
 }
 
 const Context = createContext<ContextType | undefined>(undefined);
@@ -14,7 +15,7 @@ interface ContextProviderProps {
 }
 
 const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
-    const [data, setData] = useState<any>({});
+    const [data, setData] = useState<any>({ movie: [], tv: [] });
 
     return (
         <Context.Provider value={{ data, setData }}>
