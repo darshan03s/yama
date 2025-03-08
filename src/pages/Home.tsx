@@ -3,11 +3,13 @@ import { useLocation } from "react-router-dom";
 import MediaCard from "../components/MediaCard";
 import { useRootContext } from "../Context";
 import { Category } from "../types";
+import Wrapper from "../components/Wrapper";
 
 const Home: React.FC = () => {
     const location = useLocation();
     const { data, setData } = useRootContext();
     const [currentList, setCurrentList] = useState<any[]>([]);
+    const [categoryString, setCategoryString] = useState<string>("");
 
     const searchParams = new URLSearchParams(location.search);
     const category = (searchParams.get("category") as Category) || "movie";
@@ -17,14 +19,19 @@ const Home: React.FC = () => {
 
         if (category === "movie") {
             url += "discover/movie?include_adult=false";
+            setCategoryString("Movies");
         } else if (category === "tv") {
             url += "discover/tv?include_adult=false";
+            setCategoryString("TV Shows");
         } else if (category === "now_playing") {
             url += "movie/now_playing?include_adult=false";
+            setCategoryString("Now Playing");
         } else if (category === "top_rated") {
             url += "movie/top_rated?include_adult=false";
+            setCategoryString("Top Rated");
         } else if (category === "upcoming") {
             url += "movie/upcoming?include_adult=false";
+            setCategoryString("Upcoming");
         }
 
         const options = {
@@ -57,14 +64,14 @@ const Home: React.FC = () => {
     }, [category]);
 
     return (
-        <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl text-amber-500 py-1 mb-2">Discover</h1>
+        <Wrapper>
+            <h1 className="text-3xl text-amber-500 py-1 mb-2">{categoryString}</h1>
             <div className="media-cards sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 py-2">
                 {currentList.map((item: any, index: number) => (
-                    <MediaCard item={item} key={index} />
+                    <MediaCard item={item} category={category} key={index} />
                 ))}
             </div>
-        </div>
+        </Wrapper>
     );
 };
 
