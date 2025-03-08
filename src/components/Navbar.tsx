@@ -11,7 +11,7 @@ const NavItem: React.FC<NavItemProps> = ({ name, to }) => {
     return (
         <Link to={to} className='flex items-center'>
             <span
-                className={`hidden sm:inline font-medium hover:text-black/80 transition-colors duration-100 ${path === to ? 'underline decoration-amber-800 decoration-2 underline-offset-4' : ''}`}>
+                className={`sm:inline font-medium hover:text-black/80 transition-colors duration-100 ${path === to ? 'underline decoration-amber-800 decoration-2 underline-offset-4' : ''}`}>
                 {name}
             </span>
         </Link>
