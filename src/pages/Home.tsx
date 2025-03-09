@@ -65,8 +65,8 @@ const Home: React.FC = () => {
 
     return (
         <Wrapper>
-            <h1 className="text-3xl text-amber-500 py-1 mb-2">{categoryString}</h1>
-            <div className="media-cards sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 py-2">
+            <h1 className="text-xl sm:text-3xl text-amber-500 py-1 mb-2 text-center sm:text-left px-4 xl:px-0">{categoryString}</h1>
+            <div className="media-cards grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2 px-4 xl:px-0">
                 {currentList.map((item: any, index: number) => (
                     <MediaCard item={item} category={category} key={index} />
                 ))}

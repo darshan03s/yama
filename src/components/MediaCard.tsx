@@ -14,9 +14,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category }) => {
                 <img
                     src={`https://image.tmdb.org/t/p/original${item.poster_path || item.backdrop_path}`}
                     alt={item.title}
-                    height={500}
-                    width={300}
-                    className='rounded-t-md'
+                    className='rounded-t-md w-full'
                 />
 
                 <span className='absolute top-2 right-2 bg-amber-300 text-xs p-1 rounded flex gap-1 items-center'><Star className='size-3.5' /> {Math.trunc(item.vote_average * 10) / 10}</span>
