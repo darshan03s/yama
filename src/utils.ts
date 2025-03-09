@@ -1,5 +1,7 @@
 export const tmdbBaseUrl: string = "https://api.themoviedb.org/3";
 
+export const tmdbImageUrl: string = "https://image.tmdb.org/t/p/original";
+
 export const tmdbOptions: RequestInit = {
     method: "GET",
     headers: {

@@ -1,6 +1,7 @@
 import { Star } from 'lucide-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { tmdbImageUrl } from '../utils'
 
 interface MediaCardProps {
     item: any
@@ -12,7 +13,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category }) => {
         <div className="media-card bg-amber-200 rounded-md hover:scale-105 transition-all duration-300" key={item.id}>
             <Link to={`/${category === "tv" ? "tv" : "movie"}/${item.id}`} key={item.id} className='relative'>
                 <img
-                    src={`https://image.tmdb.org/t/p/original${item.poster_path || item.backdrop_path}`}
+                    src={`${tmdbImageUrl}${item.poster_path || item.backdrop_path}`}
                     alt={item.title}
                     className='rounded-t-md w-full'
                 />
