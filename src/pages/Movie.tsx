@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { useRootContext } from '../Context';
 import { tmdbBaseUrl, formatMoney, tmdbOptions, fetchMovieFromTMDB, tmdbImageUrl } from '../utils';
 import { MovieType } from '../types';
-import { Info, OverViewHeading, Poster, Title } from '../components/MediaDetails';
+import { Info, Loading, OverViewHeading, Poster, Title } from '../components/MediaDetails';
 
 const Movie: React.FC = () => {
     const { id } = useParams();
@@ -16,7 +16,6 @@ const Movie: React.FC = () => {
         const url = `${tmdbBaseUrl}/movie/${id}`;
         const fetchMovie = async () => {
             const resJson = await fetchMovieFromTMDB(url, tmdbOptions);
-            console.log(resJson);
             setMovie(resJson);
             setFetchedMovies((prev) => ({ ...prev, [id]: resJson }));
         }
@@ -30,7 +29,7 @@ const Movie: React.FC = () => {
     }, [id]);
     return (
         <Wrapper>
-            {(!movie) ? <div className="w-full flex items-center justify-center mt-2">Loading...</div> : (
+            {(!movie) ? <Loading /> : (
                 <>
                     <Title title={movie.title} />
                     <div className="movie w-full md:grid md:grid-cols-3">

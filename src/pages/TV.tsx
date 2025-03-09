@@ -3,7 +3,7 @@ import Wrapper from '../components/Wrapper'
 import { useParams } from 'react-router-dom'
 import { useRootContext } from '../Context';
 import { fetchTVShowFromTMDB, tmdbBaseUrl, tmdbImageUrl, tmdbOptions } from '../utils';
-import { Info, OverViewHeading, Poster, Title } from '../components/MediaDetails';
+import { Info, Loading, OverViewHeading, Poster, Title } from '../components/MediaDetails';
 
 const TV: React.FC = () => {
     const { id } = useParams();
@@ -15,7 +15,6 @@ const TV: React.FC = () => {
         const url = `${tmdbBaseUrl}/tv/${id}`;
         const fetchTv = async () => {
             const resJson = await fetchTVShowFromTMDB(url, tmdbOptions);
-            console.log(resJson);
             setTv(resJson);
             setFetchedTVShows((prev) => ({ ...prev, [id]: resJson }));
         }
@@ -28,7 +27,7 @@ const TV: React.FC = () => {
     }, [id]);
     return (
         <Wrapper>
-            {(!tv) ? <div className="w-full flex items-center justify-center mt-2">Loading...</div> : (
+            {(!tv) ? <Loading /> : (
                 <>
                     <Title title={tv.name} />
                     <div className="movie w-full md:grid md:grid-cols-3">

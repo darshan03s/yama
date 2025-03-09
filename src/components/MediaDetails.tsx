@@ -1,6 +1,12 @@
 import { ExternalLink, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 
+export const Loading: React.FC = () => {
+    return (
+        <div className="w-full flex items-center justify-center mt-2">Loading...</div>
+    );
+}
+
 interface TitleProps {
     title: string;
 }
