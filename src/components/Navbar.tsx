@@ -14,7 +14,6 @@ const NavItem: React.FC<NavItemProps> = ({ name, to, isActive }) => {
             <span
                 className={`sm:inline font-medium hover:text-black/80 transition-colors duration-100 
                 ${isActive ? "underline decoration-amber-800 decoration-2 underline-offset-4" : ""}`}
-                aria-current={isActive ? "page" : undefined}
             >
                 {name}
             </span>
@@ -28,7 +27,7 @@ const Navbar: React.FC = () => {
     const category = (searchParams.get("category") as Category) || "movie";
     return (
         <nav className="bg-amber-300 p-2 flex items-center justify-center">
-            <div className="nav-items flex items-center gap-4">
+            <div className="nav-items flex items-center gap-4 text-sm sm:text-base">
                 <NavItem name="Movies" to="/" isActive={location.pathname === "/" && category === "movie"} />
                 <NavItem name="TV Shows" to="/?category=tv" isActive={category === "tv"} />
                 <NavItem name="Now playing" to="/?category=now_playing" isActive={category === "now_playing"} />
