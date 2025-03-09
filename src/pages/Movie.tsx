@@ -10,6 +10,7 @@ const Movie: React.FC = () => {
     const { id } = useParams();
     const [movie, setMovie] = useState<MovieType | null>(null);
     const { fetchedMovies, setFetchedMovies } = useRootContext();
+    let imgSrc = (movie?.poster_path || movie?.backdrop_path) ? `${tmdbImageUrl}${movie?.poster_path || movie?.backdrop_path}` : "https://placehold.co/620x900?text=No+Poster";
 
     useEffect(() => {
         if (!id) return;
@@ -33,7 +34,7 @@ const Movie: React.FC = () => {
                 <>
                     <Title title={movie.title} />
                     <div className="movie w-full md:grid md:grid-cols-3">
-                        <Poster src={`${tmdbImageUrl}${movie.poster_path || movie.backdrop_path}`} alt={movie.title} rating={movie.vote_average} />
+                        <Poster src={imgSrc} alt={movie.title} rating={movie.vote_average} />
 
                         <div className="movie-right md:col-span-2 mt-2 md:mt-0 md:px-4 md:w-full px-4 py-4 md:py-0 space-y-3">
                             <OverViewHeading externalLink={movie.homepage} />

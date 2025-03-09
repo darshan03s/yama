@@ -16,6 +16,7 @@ const Home: React.FC = () => {
     const [categoryString, setCategoryString] = useState<string>("");
     const [url, setUrl] = useState<string>("");
     const [page, setPage] = useState<number>(1);
+    const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
     const searchParams = new URLSearchParams(location.search);
     const category = (searchParams.get("category") as Category) || "movie";
@@ -42,12 +43,13 @@ const Home: React.FC = () => {
         }
 
         setUrl(url);
+        setShowSpinner(false);
 
         const fetchData = async () => {
-            const resJson = await fetchListFromTMDB(url, tmdbOptions, page);
+            const resJson = await fetchListFromTMDB(url, tmdbOptions, 1);
             setData((prev) => ({ ...prev, [category]: resJson.results }));
             setCurrentList(resJson.results);
-            setPage((prev) => prev + 1);
+            setShowSpinner(true);
         };
 
         if (!data[category] || data[category].length === 0) {
@@ -59,19 +61,23 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         if (!url) return;
-        if (inView && page > 1) {
+        if (inView) {
+            console.log(page);
             const fetchData = async () => {
-                const resJson = await fetchListFromTMDB(url, tmdbOptions, page);
+                setShowSpinner(false);
+                const resJson = await fetchListFromTMDB(url, tmdbOptions, page + 1);
                 setData((prev) => ({ ...prev, [category]: [...prev[category], ...resJson.results] }));
-                setCurrentList((prev) => [...prev, ...resJson.results]);
-                setPage((prev) => prev + 1);
+                setCurrentList(prev => [...prev, ...resJson.results]);
+                setShowSpinner(true);
+                setPage(prev => prev + 1);
             };
 
             setTimeout(() => {
                 fetchData();
-            }, 1000)
+            }, 1000);
         }
     }, [inView]);
+
 
     return (
         <Wrapper>
@@ -81,7 +87,7 @@ const Home: React.FC = () => {
                     <MediaCard item={item} category={category} key={index} />
                 ))}
             </div>
-            <div ref={ref} className="flex justify-center">
+            <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
                 <Spinner />
             </div>
         </Wrapper>
