@@ -3,7 +3,7 @@ import Wrapper from '../components/Wrapper'
 import { Link, useParams } from 'react-router-dom'
 import { useRootContext } from '../Context';
 import { ExternalLink, Star } from 'lucide-react';
-import { formatMoney } from '../utils';
+import { tmdbBaseUrl, formatMoney, tmdbOptions, fetchMovieFromTMDB } from '../utils';
 
 const Movie: React.FC = () => {
     const { id } = useParams();
@@ -11,18 +11,10 @@ const Movie: React.FC = () => {
     const { fetchedMovies, setFetchedMovies } = useRootContext();
 
     useEffect(() => {
-        const url = `https://api.themoviedb.org/3/movie/${id}`;
-        const options = {
-            method: "GET",
-            headers: {
-                accept: "application/json",
-                Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
-            },
-        };
+        if (!id) return;
+        const url = `${tmdbBaseUrl}/movie/${id}`;
         const fetchMovie = async () => {
-            if (!id) return;
-            const response = await fetch(url, options);
-            const resJson = await response.json();
+            const resJson = await fetchMovieFromTMDB(url, tmdbOptions);
             console.log(resJson);
             setMovie(resJson);
             setFetchedMovies((prev) => ({ ...prev, [id]: resJson }));
