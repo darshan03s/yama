@@ -3,16 +3,7 @@ import Wrapper from '../components/Wrapper'
 import { Link, useParams } from 'react-router-dom'
 import { useRootContext } from '../Context';
 import { ExternalLink, Star } from 'lucide-react';
-
-function formatMoney(num: number) {
-    if (!num || isNaN(num)) return "N/A";
-    if (num >= 1_000_000_000) {
-        return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
-    } else if (num >= 1_000_000) {
-        return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-    }
-    return num.toString();
-}
+import { formatMoney } from '../utils';
 
 const Movie: React.FC = () => {
     const { id } = useParams();
