@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Wrapper from '../components/Wrapper'
 import { useParams } from 'react-router-dom'
+import { useRootContext } from '../Context';
 
 const Movie: React.FC = () => {
     const { id } = useParams();
     const [movie, setMovie] = useState<any>({});
+    const { fetchedMovies, setFetchedMovies } = useRootContext();
 
     useEffect(() => {
         const url = `https://api.themoviedb.org/3/movie/${id}`;
@@ -16,13 +18,20 @@ const Movie: React.FC = () => {
             },
         };
         const fetchMovie = async () => {
+            if (!id) return;
             const response = await fetch(url, options);
             const resJson = await response.json();
             console.log(resJson);
             setMovie(resJson);
+            setFetchedMovies((prev) => ({ ...prev, [id]: resJson }));
         }
 
-        fetchMovie();
+        if (fetchedMovies[id as string]) {
+            setMovie(fetchedMovies[id as string]);
+        } else {
+            fetchMovie();
+        }
+
     }, [id]);
     return (
         <Wrapper>

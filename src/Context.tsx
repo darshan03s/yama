@@ -8,7 +8,15 @@ interface ContextType {
         top_rated: any[];
         upcoming: any[];
     };
-    setData: React.Dispatch<React.SetStateAction<{ movie: any[], tv: any[], now_playing: any[], top_rated: any[], upcoming: any[] }>>;
+    setData: React.Dispatch<React.SetStateAction<{
+        movie: any[],
+        tv: any[],
+        now_playing: any[],
+        top_rated: any[],
+        upcoming: any[]
+    }>>;
+    fetchedMovies: Record<string, any>;
+    setFetchedMovies: React.Dispatch<React.SetStateAction<Record<string, any>>>;
 }
 
 const Context = createContext<ContextType | undefined>(undefined);
@@ -19,9 +27,10 @@ interface ContextProviderProps {
 
 const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [data, setData] = useState<any>({ movie: [], tv: [], now_playing: [], top_rated: [], upcoming: [] });
+    const [fetchedMovies, setFetchedMovies] = useState<Record<string, any>>({});
 
     return (
-        <Context.Provider value={{ data, setData }}>
+        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies }}>
             {children}
         </Context.Provider>
     );
