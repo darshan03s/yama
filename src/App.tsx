@@ -8,12 +8,14 @@ import Movie from './pages/Movie'
 import Header from './components/Header'
 import Navbar from './components/Navbar'
 import TV from './pages/TV'
+import Searchbar from './components/Searchbar'
 
 const App: React.FC = () => {
   return (
     <>
       <Header />
       <Navbar />
+      <Searchbar />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
