@@ -28,8 +28,8 @@ export const fetchListFromTMDB = async (url: string, options: RequestInit, page:
     return resJson;
 }
 
-export const fetchSearchFromTMDB = async (url: string, options: RequestInit, query: string): Promise<any> => {
-    const response = await fetch(`${url}?query=${query}`, options);
+export const fetchSearchFromTMDB = async (url: string, options: RequestInit, query: string, page: number): Promise<any> => {
+    const response = await fetch(`${url}?query=${query}&page=${page}`, options);
     const resJson = await response.json();
     return resJson;
 }

@@ -17,6 +17,7 @@ const Home: React.FC = () => {
     const [url, setUrl] = useState<string>("");
     const [page, setPage] = useState<number>(1);
     const [showSpinner, setShowSpinner] = useState<boolean>(false);
+    const [totalPages, setTotalPages] = useState<number>(0);
 
     const searchParams = new URLSearchParams(location.search);
     const category = (searchParams.get("category") as Category) || "movie";
@@ -49,6 +50,7 @@ const Home: React.FC = () => {
             const resJson = await fetchListFromTMDB(url, tmdbOptions, 1);
             setData((prev) => ({ ...prev, [category]: resJson.results }));
             setCurrentList(resJson.results);
+            setTotalPages(resJson.total_pages);
             setShowSpinner(true);
         };
 
@@ -61,6 +63,10 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         if (!url) return;
+        if (page > totalPages) {
+            setShowSpinner(false);
+            return;
+        };
         if (inView) {
             console.log(page);
             const fetchData = async () => {

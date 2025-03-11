@@ -4,21 +4,52 @@ import { useSearchParams } from 'react-router-dom'
 import { fetchSearchFromTMDB, tmdbBaseUrl, tmdbOptions } from '../utils';
 import { Loading } from '../components/MediaDetails';
 import MediaCard from '../components/MediaCard';
+import { useInView } from "react-intersection-observer";
+import Spinner from '../components/Spinner';
 
 const SearchResults: React.FC = () => {
     const [searchParams] = useSearchParams();
     const [resultsList, setResultsList] = useState<any[]>([]);
+    const [page, setPage] = useState<number>(1);
+    const [showSpinner, setShowSpinner] = useState<boolean>(false);
+    const [totalPages, setTotalPages] = useState<number>(0);
+    const { ref, inView } = useInView();
     const category = searchParams.get('category');
     const url = `${tmdbBaseUrl}/search/${category}`;
     const query = searchParams.get('query');
 
     useEffect(() => {
+        setShowSpinner(false);
         const fetchResults = async () => {
-            const data = await fetchSearchFromTMDB(url, tmdbOptions, query!);
+            const data = await fetchSearchFromTMDB(url, tmdbOptions, query!, 1);
             setResultsList(data.results);
+            setTotalPages(data.total_pages);
+            setShowSpinner(true);
         }
         fetchResults();
     }, [query, category]);
+
+    useEffect(() => {
+        if (!url) return;
+        if (page > totalPages) {
+            setShowSpinner(false);
+            return;
+        };
+        if (inView) {
+            const fetchData = async () => {
+                setShowSpinner(false);
+                const resJson = await fetchSearchFromTMDB(url, tmdbOptions, query!, page + 1);
+                setResultsList(prev => [...prev, ...resJson.results]);
+                setShowSpinner(true);
+                setPage(prev => prev + 1);
+            };
+
+            setTimeout(() => {
+                fetchData();
+            }, 1000);
+        }
+    }, [inView]);
+
     return (
         <Wrapper>
             <h1 className="text-xl sm:text-3xl text-amber-500 py-1 mb-2 text-center sm:text-left px-4 xl:px-0">Search results for {query} in {category === "movie" ? "Movies" : "TV Shows"}</h1>
@@ -26,6 +57,9 @@ const SearchResults: React.FC = () => {
                 {resultsList.length === 0 ? <Loading /> : resultsList.map((item: any, index: number) => (
                     <MediaCard item={item} category={category!} key={index} />
                 ))}
+            </div>
+            <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
+                <Spinner />
             </div>
         </Wrapper>
     )
