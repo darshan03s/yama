@@ -28,6 +28,12 @@ export const fetchListFromTMDB = async (url: string, options: RequestInit, page:
     return resJson;
 }
 
+export const fetchSearchFromTMDB = async (url: string, options: RequestInit, query: string): Promise<any> => {
+    const response = await fetch(`${url}?query=${query}`, options);
+    const resJson = await response.json();
+    return resJson;
+}
+
 export function formatMoney(num: number): string {
     if (!num || isNaN(num)) return "N/A";
     if (num >= 1_000_000_000) {
