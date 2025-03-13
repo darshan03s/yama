@@ -10,21 +10,19 @@ import Spinner from '../components/Spinner';
 const SearchResults: React.FC = () => {
     const [searchParams] = useSearchParams();
     const [resultsList, setResultsList] = useState<any[]>([]);
-    const [page, setPage] = useState<number>(1);
-    const [showSpinner, setShowSpinner] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(0);
     const [totalPages, setTotalPages] = useState<number>(0);
+    const [showSpinner, setShowSpinner] = useState<boolean>(true);
     const { ref, inView } = useInView();
     const category = searchParams.get('category');
     const url = `${tmdbBaseUrl}/search/${category}`;
     const query = searchParams.get('query');
 
     useEffect(() => {
-        setShowSpinner(false);
         const fetchResults = async () => {
             const data = await fetchSearchFromTMDB(url, tmdbOptions, query!, 1);
             setResultsList(data.results);
             setTotalPages(data.total_pages);
-            setShowSpinner(true);
         }
         fetchResults();
     }, [query, category]);
@@ -37,10 +35,8 @@ const SearchResults: React.FC = () => {
         };
         if (inView) {
             const fetchData = async () => {
-                setShowSpinner(false);
                 const resJson = await fetchSearchFromTMDB(url, tmdbOptions, query!, page + 1);
                 setResultsList(prev => [...prev, ...resJson.results]);
-                setShowSpinner(true);
                 setPage(prev => prev + 1);
             };
 

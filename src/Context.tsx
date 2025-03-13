@@ -19,6 +19,8 @@ interface ContextType {
     setFetchedMovies: React.Dispatch<React.SetStateAction<Record<string, any>>>;
     fetchedTVShows: Record<string, any>;
     setFetchedTVShows: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+    pageInfo: Record<string, Record<string, number>>;
+    setPageInfo: React.Dispatch<React.SetStateAction<Record<string, Record<string, number>>>>;
 }
 
 const Context = createContext<ContextType | undefined>(undefined);
@@ -31,9 +33,10 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [data, setData] = useState<any>({ movie: [], tv: [], now_playing: [], top_rated: [], upcoming: [] });
     const [fetchedMovies, setFetchedMovies] = useState<Record<string, any>>({});
     const [fetchedTVShows, setFetchedTVShows] = useState<Record<string, any>>({});
+    const [pageInfo, setPageInfo] = useState<Record<string, Record<string, number>>>({});
 
     return (
-        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows }}>
+        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo }}>
             {children}
         </Context.Provider>
     );

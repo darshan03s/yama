@@ -26,7 +26,6 @@ const Searchbar: React.FC = () => {
         navigate(`/search?category=${media}&query=${search}`);
     }
 
-    console.log(media);
     return (
         <Wrapper className="px-4 py-2 xl:px-0 flex items-center">
             <input

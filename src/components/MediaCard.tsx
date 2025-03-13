@@ -13,7 +13,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category }) => {
     let imgSrc = (item.poster_path || item.backdrop_path) ? `${tmdbImageUrl}${item.poster_path || item.backdrop_path}` : "https://placehold.co/620x1000?text=No+Poster";
     return (
         <div
-            className="media-card bg-amber-200 rounded-md hover:scale-105 transition-all duration-300 cursor-pointer"
+            className="media-card max-w-[380px] bg-amber-200 rounded-md hover:scale-105 transition-all duration-300 cursor-pointer"
             onClick={() => navigate(`/${category === "tv" ? "tv" : "movie"}/${item.id}`)}
         >
             <div key={item.id} className='relative'>

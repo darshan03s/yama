@@ -1,3 +1,9 @@
+export const devLog = (message: any) => {
+    if (import.meta.env.DEV) {
+        console.log(message);
+    }
+}
+
 export const tmdbBaseUrl: string = "https://api.themoviedb.org/3";
 
 export const tmdbImageUrl: string = "https://image.tmdb.org/t/p/original";

@@ -7,16 +7,16 @@ import Wrapper from "../components/Wrapper";
 import { Loading } from "../components/MediaDetails";
 import Spinner from "../components/Spinner";
 import { useInView } from "react-intersection-observer";
-import { fetchListFromTMDB, tmdbBaseUrl, tmdbOptions } from "../utils";
+import { devLog, fetchListFromTMDB, tmdbBaseUrl, tmdbOptions } from "../utils";
 
 const Home: React.FC = () => {
     const location = useLocation();
-    const { data, setData } = useRootContext();
+    const { data, setData, pageInfo, setPageInfo } = useRootContext();
     const [currentList, setCurrentList] = useState<any[]>([]);
     const [categoryString, setCategoryString] = useState<string>("");
     const [url, setUrl] = useState<string>("");
-    const [page, setPage] = useState<number>(1);
-    const [showSpinner, setShowSpinner] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(0);
+    const [showSpinner, setShowSpinner] = useState<boolean>(true);
     const [totalPages, setTotalPages] = useState<number>(0);
 
     const searchParams = new URLSearchParams(location.search);
@@ -25,6 +25,10 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         let url = tmdbBaseUrl;
+        if (pageInfo[category]) {
+            setPage(pageInfo[category].page);
+            setTotalPages(pageInfo[category].totalPages);
+        }
 
         if (category === "movie") {
             url += "/discover/movie?include_adult=false";
@@ -44,7 +48,6 @@ const Home: React.FC = () => {
         }
 
         setUrl(url);
-        setShowSpinner(false);
 
         const fetchData = async () => {
             const resJson = await fetchListFromTMDB(url, tmdbOptions, 1);
@@ -52,6 +55,7 @@ const Home: React.FC = () => {
             setCurrentList(resJson.results);
             setTotalPages(resJson.total_pages);
             setShowSpinner(true);
+            setPage(1);
         };
 
         if (!data[category] || data[category].length === 0) {
@@ -63,18 +67,19 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         if (!url) return;
+        devLog(`Current page: ${page}`);
         if (page > totalPages) {
             setShowSpinner(false);
             return;
         };
         if (inView) {
-            console.log(page);
+            devLog(`Fetching page ${page + 1}`);
             const fetchData = async () => {
-                setShowSpinner(false);
                 const resJson = await fetchListFromTMDB(url, tmdbOptions, page + 1);
+                devLog(resJson);
                 setData((prev) => ({ ...prev, [category]: [...prev[category], ...resJson.results] }));
                 setCurrentList(prev => [...prev, ...resJson.results]);
-                setShowSpinner(true);
+                setPageInfo((prev) => ({ ...prev, [category]: { page: page + 1, totalPages: resJson.total_pages } }));
                 setPage(prev => prev + 1);
             };
 
