@@ -8,6 +8,7 @@ import { Loading } from "../components/MediaDetails";
 import Spinner from "../components/Spinner";
 import { useInView } from "react-intersection-observer";
 import { devLog, fetchListFromTMDB, tmdbBaseUrl, tmdbOptions } from "../utils";
+import { ArrowUp } from "lucide-react";
 
 const Home: React.FC = () => {
     const location = useLocation();
@@ -91,17 +92,28 @@ const Home: React.FC = () => {
 
 
     return (
-        <Wrapper>
-            <h1 className="text-xl sm:text-3xl text-amber-500 py-1 mb-2 text-center sm:text-left px-4 xl:px-0">{categoryString}</h1>
-            <div className="media-cards grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2 px-4 xl:px-0">
-                {currentList.length === 0 ? <Loading /> : currentList.map((item: any, index: number) => (
-                    <MediaCard item={item} category={category} key={index} />
-                ))}
+        <>
+            <Wrapper>
+                <h1 className="text-xl sm:text-3xl text-amber-500 py-1 mb-2 text-center sm:text-left px-4 xl:px-0">{categoryString}</h1>
+                <div className="media-cards grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2 px-4 xl:px-0">
+                    {currentList.length === 0 ? <Loading /> : currentList.map((item: any, index: number) => (
+                        <MediaCard item={item} category={category} key={index} />
+                    ))}
+                </div>
+                <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
+                    <Spinner />
+                </div>
+            </Wrapper>
+
+            <div className="go-to-top">
+                <button
+                    className=" bg-amber-500 text-white p-1 rounded-full opacity-50 fixed z-10 bottom-4 right-4 cursor-pointer"
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                >
+                    <ArrowUp />
+                </button>
             </div>
-            <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
-                <Spinner />
-            </div>
-        </Wrapper>
+        </>
     );
 };
 
