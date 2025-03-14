@@ -4,10 +4,11 @@ import { useParams } from 'react-router-dom'
 import { useRootContext } from '../Context';
 import { fetchTVShowFromTMDB, tmdbBaseUrl, tmdbImageUrl, tmdbOptions } from '../utils';
 import { Info, Loading, OverViewHeading, Poster, Title } from '../components/MediaDetails';
+import { TYShowType } from '../types';
 
 const TV: React.FC = () => {
     const { id } = useParams();
-    const [tv, setTv] = useState<any | null>(null);
+    const [tv, setTv] = useState<TYShowType | null>(null);
     const { fetchedTVShows, setFetchedTVShows } = useRootContext();
 
     useEffect(() => {
