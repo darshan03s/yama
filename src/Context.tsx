@@ -1,3 +1,4 @@
+import { Session } from "@supabase/supabase-js";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface ContextType {
@@ -21,6 +22,8 @@ interface ContextType {
     setFetchedTVShows: React.Dispatch<React.SetStateAction<Record<string, any>>>;
     pageInfo: Record<string, Record<string, number>>;
     setPageInfo: React.Dispatch<React.SetStateAction<Record<string, Record<string, number>>>>;
+    session: Session | null;
+    setSession: React.Dispatch<React.SetStateAction<Session | null>>;
 }
 
 const Context = createContext<ContextType | undefined>(undefined);
@@ -34,9 +37,10 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [fetchedMovies, setFetchedMovies] = useState<Record<string, any>>({});
     const [fetchedTVShows, setFetchedTVShows] = useState<Record<string, any>>({});
     const [pageInfo, setPageInfo] = useState<Record<string, Record<string, number>>>({});
+    const [session, setSession] = useState<Session | null>(null);
 
     return (
-        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo }}>
+        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo, session, setSession }}>
             {children}
         </Context.Provider>
     );
