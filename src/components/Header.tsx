@@ -16,7 +16,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ name, to, Icon }) => {
 
 const Logo: React.FC = () => {
     return (
-        <Link to={'/'} className='text-xl font-bold bg-amber-300 p-2 rounded-md'>YAMDb</Link>
+        <Link to={'/'} className='text-sm md:text-lg font-bold bg-amber-300 p-1 rounded-md'>YAMDb</Link>
     )
 }
 
@@ -27,7 +27,14 @@ const Header: React.FC = () => {
                 <MenuItem name={"Home"} to={"/"} Icon={House} />
                 <MenuItem name={"About"} to={"/about"} Icon={Info} />
             </div>
-            <div className="logo"><Logo /></div>
+            <div className="logo account flex items-center gap-2">
+                <Logo />
+                <div className="account">
+                    <Link to={'/login'} className="text-sm md:text-lg border p-1 rounded-md cursor-pointer">
+                        Login
+                    </Link>
+                </div>
+            </div>
         </header>
     )
 }
