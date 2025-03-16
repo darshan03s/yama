@@ -1,21 +1,32 @@
 import React, { useEffect } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
 import Home from './pages/Home'
 import About from './pages/About'
 import Movie from './pages/Movie'
 import TV from './pages/TV'
+import Login from './pages/Login'
+import Profile from './pages/Profile'
+import SearchResults from './pages/SearchResults'
 
 import Header from './components/Header'
 import Navbar from './components/Navbar'
 import Searchbar from './components/Searchbar'
-import SearchResults from './pages/SearchResults'
-import Login from './pages/Login'
-import Profile from './pages/Profile'
+
 import supabase from './supabaseClient'
 import { useRootContext } from './Context'
 import { devLog } from './utils'
 import { UserType } from './types'
+
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { session } = useRootContext();
+
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -59,7 +70,11 @@ const App: React.FC = () => {
         <Route path='/tv/:id' element={<TV />} />
         <Route path='/search' element={<SearchResults />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/profile' element={<Profile />} />
+        <Route path='/profile' element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } />
       </Routes>
     </>
   )
