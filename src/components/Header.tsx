@@ -65,6 +65,7 @@ const Header: React.FC = () => {
                             {showAccountOptions &&
                                 <div ref={popupRef} className="account-options absolute z-20 bg-white shadow-lg rounded-md right-2 top-10 w-[150px] flex flex-col gap-2 py-1 px-1">
                                     <button
+                                        onClick={() => navigate('/profile')}
                                         className="account-options-item hover:bg-gray-200 rounded-md h-8 flex items-center justify-center gap-2 transition-colors duration-100 cursor-pointer"
                                     >
                                         <UserRound className='size-4' /> Profile

@@ -34,3 +34,12 @@ export type TYShowType = {
     original_language?: string;
     original_name?: string;
 };
+
+export type UserType = {
+    id?: number;
+    name: string;
+    email: string;
+    password?: string;
+    avatar_url: string;
+};
+

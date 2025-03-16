@@ -11,18 +11,29 @@ import Navbar from './components/Navbar'
 import Searchbar from './components/Searchbar'
 import SearchResults from './pages/SearchResults'
 import Login from './pages/Login'
+import Profile from './pages/Profile'
 import supabase from './supabaseClient'
 import { useRootContext } from './Context'
 import { devLog } from './utils'
+import { UserType } from './types'
 
 const App: React.FC = () => {
   const location = useLocation();
-  const { setSession, session } = useRootContext();
-  const isLogin = location.pathname === '/login';
+  const { setSession, session, setUser } = useRootContext();
+  const isLogin: boolean = location.pathname === '/login';
+  const isProfile: boolean = location.pathname === '/profile';
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session) {
+        const userDataFromSession: UserType = {
+          name: session.user.user_metadata.full_name,
+          email: session.user.email!,
+          avatar_url: session.user.user_metadata.avatar_url || session.user.user_metadata.picture,
+        }
+        setUser(userDataFromSession);
+      }
     });
 
     const {
@@ -39,8 +50,8 @@ const App: React.FC = () => {
   return (
     <>
       <Header />
-      {!isLogin && <Navbar />}
-      {!isLogin && <Searchbar />}
+      {!isLogin && !isProfile && <Navbar />}
+      {!isLogin && !isProfile && <Searchbar />}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
@@ -48,6 +59,7 @@ const App: React.FC = () => {
         <Route path='/tv/:id' element={<TV />} />
         <Route path='/search' element={<SearchResults />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/profile' element={<Profile />} />
       </Routes>
     </>
   )
