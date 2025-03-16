@@ -22,7 +22,7 @@ const Profile: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="user-lists my-4">
+            <div className="user-lists-info my-4">
                 <h2 className="text-xl sm:text-3xl text-amber-500 py-1 mb-2 text-center sm:text-left px-4 xl:px-0">Lists</h2>
             </div>
         </Wrapper>

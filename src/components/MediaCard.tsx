@@ -1,14 +1,24 @@
-import { Star } from 'lucide-react'
+import { Heart, Star } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { tmdbImageUrl } from '../utils'
+import { MovieType, TYShowType } from '../types'
 
 interface MediaCardProps {
-    item: any
+    item: MovieType | TYShowType
     category: string
 }
 
 const MediaCard: React.FC<MediaCardProps> = ({ item, category }) => {
+    const getRating = () => {
+        return Math.trunc(item.vote_average * 10) / 10;
+    }
+
+    const handleAddToFavorites = (e: React.MouseEvent, id: number, category: string) => {
+        e.stopPropagation();
+        console.log(id, category);
+    }
+
     const navigate = useNavigate();
     let imgSrc = (item.poster_path || item.backdrop_path) ? `${tmdbImageUrl}${item.poster_path || item.backdrop_path}` : "https://placehold.co/620x1000?text=No+Poster";
     return (
@@ -23,12 +33,22 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category }) => {
                     className='rounded-t-md w-full xl:h-[350px]'
                 />
 
-                <span className='absolute top-2 right-2 bg-amber-300 text-xs p-1 rounded flex gap-1 items-center'><Star className='size-3.5' /> {Math.trunc(item.vote_average * 10) / 10}</span>
+                <div className="absolute top-2 flex justify-between w-full">
+                    <span className='bg-amber-300 text-xs rounded-full py-1 px-1 ml-2 cursor-pointer' title='Add to Favorites' onClick={
+                        (e) => handleAddToFavorites(e, item.id, category)
+                    }>
+                        <Heart className='size-3.5' />
+                    </span>
+                    <span className='bg-amber-300 text-xs rounded flex gap-1 px-1 items-center mr-2' title='Rating'>
+                        <Star className='size-3.5' /> {getRating()}
+                    </span>
+                </div>
+
             </div>
 
             <div className="info p-1">
-                <h2 className='text-center text-lg truncate font-medium'>{item.title || item.name}</h2>
-                <div className="text-center text-xs">{item.release_date || item.first_air_date}</div>
+                <h2 className='text-center text-lg truncate font-medium'>{category === "movie" ? (item as MovieType).title : (item as TYShowType).name}</h2>
+                <div className="text-center text-xs">{category === "movie" ? (item as MovieType).release_date : (item as TYShowType).first_air_date}</div>
             </div>
         </div>
     )
