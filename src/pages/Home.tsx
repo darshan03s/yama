@@ -23,21 +23,8 @@ const Home: React.FC = () => {
     const searchParams = new URLSearchParams(location.search);
     const category = (searchParams.get("category") as Category) || "movie";
     const { ref, inView } = useInView();
-    const { favorites, setFavorites } = useRootContext();
+    const { favorites, toggleFavorite } = useRootContext();
 
-    const toggleFavorite = (id: number, category: string) => {
-        setFavorites((prev) => {
-            const exists = prev.some((item) => item.id === id);
-
-            if (exists) {
-                return prev.map((item) =>
-                    item.id === id ? { ...item, isFavorited: !item.isFavorited } : item
-                );
-            } else {
-                return [...prev, { id, category, isFavorited: true, createdAt: new Date().toISOString() }];
-            }
-        });
-    };
 
     devLog(favorites);
 

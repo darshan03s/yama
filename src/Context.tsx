@@ -29,6 +29,7 @@ interface ContextType {
     setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
     favorites: FavoriteType[];
     setFavorites: React.Dispatch<React.SetStateAction<FavoriteType[]>>;
+    toggleFavorite: (id: number, category: string) => void;
 }
 
 const Context = createContext<ContextType | undefined>(undefined);
@@ -46,8 +47,22 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [session, setSession] = useState<Session | null>(null);
     const [favorites, setFavorites] = useState<FavoriteType[]>([]);
 
+    const toggleFavorite = (id: number, category: string) => {
+        setFavorites((prev) => {
+            const exists = prev.some((item) => item.id === id);
+
+            if (exists) {
+                return prev.map((item) =>
+                    item.id === id ? { ...item, isFavorited: !item.isFavorited } : item
+                );
+            } else {
+                return [...prev, { id, category, isFavorited: true, createdAt: new Date().toISOString() }];
+            }
+        });
+    };
+
     return (
-        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo, user, setUser, session, setSession, favorites, setFavorites }}>
+        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo, user, setUser, session, setSession, favorites, setFavorites, toggleFavorite }}>
             {children}
         </Context.Provider>
     );
