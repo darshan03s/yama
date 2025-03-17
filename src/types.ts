@@ -43,3 +43,9 @@ export type UserType = {
     avatar_url: string;
 };
 
+export type FavoriteType = {
+    id: number;
+    category: string;
+    isFavorited: boolean;
+    createdAt: string;
+};

@@ -1,6 +1,6 @@
 import { Session } from "@supabase/supabase-js";
 import { createContext, ReactNode, useContext, useState } from "react";
-import { UserType } from "./types";
+import { FavoriteType, UserType } from "./types";
 
 interface ContextType {
     data: {
@@ -27,6 +27,8 @@ interface ContextType {
     setSession: React.Dispatch<React.SetStateAction<Session | null>>;
     user: UserType | null;
     setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
+    favorites: FavoriteType[];
+    setFavorites: React.Dispatch<React.SetStateAction<FavoriteType[]>>;
 }
 
 const Context = createContext<ContextType | undefined>(undefined);
@@ -42,9 +44,10 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [pageInfo, setPageInfo] = useState<Record<string, Record<string, number>>>({});
     const [user, setUser] = useState<UserType | null>(null);
     const [session, setSession] = useState<Session | null>(null);
+    const [favorites, setFavorites] = useState<FavoriteType[]>([]);
 
     return (
-        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo, user, setUser, session, setSession }}>
+        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo, user, setUser, session, setSession, favorites, setFavorites }}>
             {children}
         </Context.Provider>
     );

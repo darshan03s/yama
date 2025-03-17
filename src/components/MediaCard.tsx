@@ -7,16 +7,18 @@ import { MovieType, TYShowType } from '../types'
 interface MediaCardProps {
     item: MovieType | TYShowType
     category: string
+    isFavorited: boolean
+    toggleFavorite: (id: number, category: string) => void
 }
 
-const MediaCard: React.FC<MediaCardProps> = ({ item, category }) => {
+const MediaCard: React.FC<MediaCardProps> = ({ item, category, isFavorited, toggleFavorite }) => {
     const getRating = () => {
         return Math.trunc(item.vote_average * 10) / 10;
     }
 
     const handleAddToFavorites = (e: React.MouseEvent, id: number, category: string) => {
         e.stopPropagation();
-        console.log(id, category);
+        toggleFavorite(id, category);
     }
 
     const navigate = useNavigate();
@@ -34,10 +36,13 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category }) => {
                 />
 
                 <div className="absolute top-2 flex justify-between w-full">
-                    <span className='bg-amber-300 text-xs rounded-full py-1 px-1 ml-2 cursor-pointer' title='Add to Favorites' onClick={
-                        (e) => handleAddToFavorites(e, item.id, category)
-                    }>
-                        <Heart className='size-3.5' />
+                    <span
+                        className='favorite bg-amber-300 text-xs rounded-full py-1 px-1 ml-2 cursor-pointer hover:scale-115 transition-all duration-100'
+                        title='Add to Favorites'
+                        onClick={
+                            (e) => handleAddToFavorites(e, item.id, category)
+                        }>
+                        <Heart className='size-3.5' fill={isFavorited ? 'black' : 'transparent'} stroke='black' />
                     </span>
                     <span className='bg-amber-300 text-xs rounded flex gap-1 px-1 items-center mr-2' title='Rating'>
                         <Star className='size-3.5' /> {getRating()}
