@@ -1,17 +1,9 @@
 import React, { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
-import Home from './pages/Home'
-import About from './pages/About'
-import Movie from './pages/Movie'
-import TV from './pages/TV'
-import Login from './pages/Login'
-import Profile from './pages/Profile'
-import SearchResults from './pages/SearchResults'
+import { About, Home, Login, Movie, Profile, SearchResults, TV } from './pages';
 
-import Header from './components/Header'
-import Navbar from './components/Navbar'
-import Searchbar from './components/Searchbar'
+import { Header, Navbar, Searchbar } from './components'
 
 import supabase from './supabaseClient'
 import { useRootContext } from './Context'

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import MediaCard from "../components/MediaCard";
 import { useRootContext } from "../Context";
 import { Category, MovieType, TYShowType } from "../types";
-import Wrapper from "../components/Wrapper";
 import { Loading } from "../components/MediaDetails";
-import Spinner from "../components/Spinner";
+import { MediaCard, Wrapper, Spinner } from "../components"
+
 import { useInView } from "react-intersection-observer";
 import { devLog, fetchListFromTMDB, tmdbBaseUrl, tmdbOptions } from "../utils";
 import { ArrowUp } from "lucide-react";

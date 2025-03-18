@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Wrapper from '../components/Wrapper'
+import { Wrapper } from '../components'
 import { useParams } from 'react-router-dom'
 import { useRootContext } from '../Context';
 import { fetchTVShowFromTMDB, tmdbBaseUrl, tmdbImageUrl, tmdbOptions } from '../utils';

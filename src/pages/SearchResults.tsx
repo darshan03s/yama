@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import Wrapper from '../components/Wrapper'
 import { useSearchParams } from 'react-router-dom'
 import { fetchSearchFromTMDB, tmdbBaseUrl, tmdbOptions } from '../utils';
-import { Loading } from '../components/MediaDetails';
-import MediaCard from '../components/MediaCard';
 import { useInView } from "react-intersection-observer";
-import Spinner from '../components/Spinner';
+import { MediaCard, Wrapper, Spinner } from "../components"
+import { Loading } from '../components/MediaDetails';
 import { ArrowUp } from 'lucide-react';
 import { useRootContext } from '../Context';
 import { MovieType, TYShowType } from '../types';
