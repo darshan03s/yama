@@ -49,3 +49,9 @@ export type FavoriteType = {
     isFavorited: boolean;
     createdAt: string;
 };
+
+export type FavoritesListType = {
+    listId: string;
+    listName: string;
+    listItems: FavoriteType[];
+};

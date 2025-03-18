@@ -1,6 +1,7 @@
 import { Session } from "@supabase/supabase-js";
 import { createContext, ReactNode, useContext, useState } from "react";
-import { FavoriteType, MovieType, TYShowType, UserType } from "./types";
+import { FavoritesListType, MovieType, TYShowType, UserType } from "./types";
+import { v4 as uuidv4 } from "uuid";
 
 interface ContextType {
     data: {
@@ -27,8 +28,8 @@ interface ContextType {
     setSession: React.Dispatch<React.SetStateAction<Session | null>>;
     user: UserType | null;
     setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
-    favorites: FavoriteType[];
-    setFavorites: React.Dispatch<React.SetStateAction<FavoriteType[]>>;
+    favorites: FavoritesListType;
+    setFavorites: React.Dispatch<React.SetStateAction<FavoritesListType>>;
     toggleFavorite: (id: number, category: string) => void;
     toastInfo: Record<string, string>;
     setToastInfo: React.Dispatch<React.SetStateAction<Record<string, string>>>;
@@ -48,19 +49,31 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [pageInfo, setPageInfo] = useState<Record<string, Record<string, number>>>({});
     const [user, setUser] = useState<UserType | null>(null);
     const [session, setSession] = useState<Session | null>(null);
-    const [favorites, setFavorites] = useState<FavoriteType[]>([]);
+    const [favorites, setFavorites] = useState<FavoritesListType>({
+        listId: "",
+        listName: "",
+        listItems: [],
+    });
+
     const [toastInfo, setToastInfo] = useState<Record<string, string>>({});
 
     const toggleFavorite = (id: number, category: string) => {
         setFavorites((prev) => {
-            const exists = prev.some((item) => item.id === id);
+            const exists = prev.listItems.some((item) => item.id === id);
 
             if (exists) {
-                return prev.map((item) =>
-                    item.id === id ? { ...item, isFavorited: !item.isFavorited } : item
-                );
+                return {
+                    ...prev,
+                    listItems: prev.listItems.map((item) =>
+                        item.id === id ? { ...item, isFavorited: !item.isFavorited } : item
+                    )
+                };
             } else {
-                return [...prev, { id, category, isFavorited: true, createdAt: new Date().toISOString() }];
+                return {
+                    listId: uuidv4(),
+                    listName: "Favorites",
+                    listItems: [...prev.listItems, { id, category, isFavorited: true, createdAt: new Date().toISOString() }]
+                };
             }
         });
     };

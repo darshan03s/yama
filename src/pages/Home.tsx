@@ -100,7 +100,7 @@ const Home: React.FC = () => {
                 <h1 className="text-xl sm:text-3xl text-amber-500 py-1 mb-2 text-center sm:text-left px-4 xl:px-0">{categoryString}</h1>
                 <div className="media-cards grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2 px-4 xl:px-0">
                     {currentList.length === 0 ? <Loading /> : currentList.map((item: MovieType | TYShowType, index: number) => (
-                        <MediaCard item={item} category={category} key={index} isFavorited={favorites.find(f => f.id === item.id)?.isFavorited ?? false} toggleFavorite={toggleFavorite} />
+                        <MediaCard item={item} category={category} key={index} isFavorited={favorites.listItems.find(f => f.id === item.id)?.isFavorited ?? false} toggleFavorite={toggleFavorite} />
                     ))}
                 </div>
                 <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
