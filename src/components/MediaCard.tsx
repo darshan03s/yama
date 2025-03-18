@@ -3,6 +3,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { tmdbImageUrl } from '../utils'
 import { MovieType, TYShowType } from '../types'
+import { useRootContext } from '../Context'
 
 interface MediaCardProps {
     item: MovieType | TYShowType
@@ -12,12 +13,17 @@ interface MediaCardProps {
 }
 
 const MediaCard: React.FC<MediaCardProps> = ({ item, category, isFavorited, toggleFavorite }) => {
+    const { session, showToast } = useRootContext();
     const getRating = () => {
         return Math.trunc(item.vote_average * 10) / 10;
     }
 
     const handleAddToFavorites = (e: React.MouseEvent, id: number, category: string) => {
         e.stopPropagation();
+        if (!session) {
+            showToast('Please login to add to favorites', 'error');
+            return;
+        };
         toggleFavorite(id, category);
     }
 

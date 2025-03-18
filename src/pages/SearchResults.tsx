@@ -8,10 +8,11 @@ import { useInView } from "react-intersection-observer";
 import Spinner from '../components/Spinner';
 import { ArrowUp } from 'lucide-react';
 import { useRootContext } from '../Context';
+import { MovieType, TYShowType } from '../types';
 
 const SearchResults: React.FC = () => {
     const [searchParams] = useSearchParams();
-    const [resultsList, setResultsList] = useState<any[]>([]);
+    const [resultsList, setResultsList] = useState<MovieType[] | TYShowType[]>([]);
     const [page, setPage] = useState<number>(0);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -54,7 +55,7 @@ const SearchResults: React.FC = () => {
             <Wrapper>
                 <h1 className="text-xl sm:text-3xl text-amber-500 py-1 mb-2 text-center sm:text-left px-4 xl:px-0">Search results for {query} in {category === "movie" ? "Movies" : "TV Shows"}</h1>
                 <div className="media-cards grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2 px-4 xl:px-0">
-                    {resultsList.length === 0 ? <Loading /> : resultsList.map((item: any, index: number) => (
+                    {resultsList.length === 0 ? <Loading /> : resultsList.map((item: MovieType | TYShowType, index: number) => (
                         <MediaCard item={item} category={category!} key={index} isFavorited={favorites.find(f => f.id === item.id)?.isFavorited ?? false} toggleFavorite={toggleFavorite} />
                     ))}
                 </div>

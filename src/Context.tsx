@@ -1,26 +1,26 @@
 import { Session } from "@supabase/supabase-js";
 import { createContext, ReactNode, useContext, useState } from "react";
-import { FavoriteType, UserType } from "./types";
+import { FavoriteType, MovieType, TYShowType, UserType } from "./types";
 
 interface ContextType {
     data: {
-        movie: any[];
-        tv: any[];
-        now_playing: any[];
-        top_rated: any[];
-        upcoming: any[];
+        movie: MovieType[];
+        tv: TYShowType[];
+        now_playing: MovieType[];
+        top_rated: MovieType[];
+        upcoming: MovieType[];
     };
     setData: React.Dispatch<React.SetStateAction<{
-        movie: any[],
-        tv: any[],
-        now_playing: any[],
-        top_rated: any[],
-        upcoming: any[]
+        movie: MovieType[],
+        tv: TYShowType[],
+        now_playing: MovieType[],
+        top_rated: MovieType[],
+        upcoming: MovieType[]
     }>>;
-    fetchedMovies: Record<string, any>;
-    setFetchedMovies: React.Dispatch<React.SetStateAction<Record<string, any>>>;
-    fetchedTVShows: Record<string, any>;
-    setFetchedTVShows: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+    fetchedMovies: Record<string, MovieType>;
+    setFetchedMovies: React.Dispatch<React.SetStateAction<Record<string, MovieType>>>;
+    fetchedTVShows: Record<string, TYShowType>;
+    setFetchedTVShows: React.Dispatch<React.SetStateAction<Record<string, TYShowType>>>;
     pageInfo: Record<string, Record<string, number>>;
     setPageInfo: React.Dispatch<React.SetStateAction<Record<string, Record<string, number>>>>;
     session: Session | null;
@@ -30,6 +30,9 @@ interface ContextType {
     favorites: FavoriteType[];
     setFavorites: React.Dispatch<React.SetStateAction<FavoriteType[]>>;
     toggleFavorite: (id: number, category: string) => void;
+    toastInfo: Record<string, string>;
+    setToastInfo: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+    showToast: (message: string, type: 'success' | 'error') => void;
 }
 
 const Context = createContext<ContextType | undefined>(undefined);
@@ -39,13 +42,14 @@ interface ContextProviderProps {
 }
 
 const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
-    const [data, setData] = useState<any>({ movie: [], tv: [], now_playing: [], top_rated: [], upcoming: [] });
-    const [fetchedMovies, setFetchedMovies] = useState<Record<string, any>>({});
-    const [fetchedTVShows, setFetchedTVShows] = useState<Record<string, any>>({});
+    const [data, setData] = useState<{ movie: MovieType[], tv: TYShowType[], now_playing: MovieType[], top_rated: MovieType[], upcoming: MovieType[] }>({ movie: [], tv: [], now_playing: [], top_rated: [], upcoming: [] });
+    const [fetchedMovies, setFetchedMovies] = useState<Record<string, MovieType>>({});
+    const [fetchedTVShows, setFetchedTVShows] = useState<Record<string, TYShowType>>({});
     const [pageInfo, setPageInfo] = useState<Record<string, Record<string, number>>>({});
     const [user, setUser] = useState<UserType | null>(null);
     const [session, setSession] = useState<Session | null>(null);
     const [favorites, setFavorites] = useState<FavoriteType[]>([]);
+    const [toastInfo, setToastInfo] = useState<Record<string, string>>({});
 
     const toggleFavorite = (id: number, category: string) => {
         setFavorites((prev) => {
@@ -61,8 +65,15 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
         });
     };
 
+    const showToast = (message: string, type: 'success' | 'error') => {
+        setToastInfo({
+            message,
+            type
+        });
+    };
+
     return (
-        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo, user, setUser, session, setSession, favorites, setFavorites, toggleFavorite }}>
+        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo, user, setUser, session, setSession, favorites, setFavorites, toggleFavorite, toastInfo, setToastInfo, showToast }}>
             {children}
         </Context.Provider>
     );
