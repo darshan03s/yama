@@ -60,7 +60,7 @@ const Header: React.FC = () => {
                 <Logo />
                 {session ?
                     <>
-                        <button className='cursor-pointer relative' onClick={() => setShowAccountOptions(!showAccountOptions)}>
+                        <div className='cursor-pointer relative' onClick={() => setShowAccountOptions(!showAccountOptions)}>
                             <img src={session.user.user_metadata.avatar || session.user.user_metadata.picture} alt="Avatar" className='size-8 md:size-9 rounded-full' />
                             {showAccountOptions &&
                                 <div ref={popupRef} className="account-options absolute z-20 bg-white shadow-lg rounded-md right-2 top-10 w-[150px] flex flex-col gap-2 py-1 px-1">
@@ -78,7 +78,7 @@ const Header: React.FC = () => {
                                     </button>
                                 </div>
                             }
-                        </button>
+                        </div>
                     </>
                     :
                     <>

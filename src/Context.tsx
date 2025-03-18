@@ -50,8 +50,8 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [user, setUser] = useState<UserType | null>(null);
     const [session, setSession] = useState<Session | null>(null);
     const [favorites, setFavorites] = useState<FavoritesListType>({
-        listId: "",
-        listName: "",
+        listId: uuidv4(),
+        listName: "Favorites",
         listItems: [],
     });
 
@@ -70,8 +70,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
                 };
             } else {
                 return {
-                    listId: uuidv4(),
-                    listName: "Favorites",
+                    ...prev,
                     listItems: [...prev.listItems, { id, category, isFavorited: true, createdAt: new Date().toISOString() }]
                 };
             }
