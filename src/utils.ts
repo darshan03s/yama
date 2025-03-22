@@ -1,8 +1,8 @@
-export const devLog = (message: any) => {
+export const devLog = (...args: any[]) => {
     if (import.meta.env.DEV) {
-        console.log(message);
+        console.log(...args);
     }
-}
+};
 
 export const tmdbBaseUrl: string = "https://api.themoviedb.org/3";
 

@@ -36,8 +36,8 @@ export type TYShowType = {
 };
 
 export type UserType = {
-    id?: number;
-    name: string;
+    id: string;
+    username: string;
     email: string;
     password?: string;
     avatar_url: string;

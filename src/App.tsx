@@ -8,7 +8,7 @@ import { Header, Navbar, Searchbar } from './components'
 import supabase from './supabaseClient'
 import { useRootContext } from './Context'
 import { devLog } from './utils'
-import { UserType } from './types'
+import { FavoritesListType, UserType } from './types'
 import toast, { Toaster } from 'react-hot-toast';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -23,7 +23,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 const App: React.FC = () => {
   const location = useLocation();
-  const { setSession, session, setUser, toastInfo } = useRootContext();
+  const { setSession, session, setUser, toastInfo, setFavorites } = useRootContext();
   const isLogin: boolean = location.pathname === '/login';
   const isProfile: boolean = location.pathname === '/profile';
 
@@ -32,25 +32,62 @@ const App: React.FC = () => {
       setSession(session);
       if (session) {
         const userDataFromSession: UserType = {
-          name: session.user.user_metadata.full_name,
+          id: session.user.id,
+          username: session.user.user_metadata.full_name,
           email: session.user.email!,
           avatar_url: session.user.user_metadata.avatar_url || session.user.user_metadata.picture,
         }
+        const addUser = async () => {
+          const { data, error } = await supabase
+            .from("users")
+            .upsert([userDataFromSession], { onConflict: "id" });
+
+          if (error) {
+            devLog("Error adding user", error);
+          } else {
+            devLog("User added", data);
+          }
+        }
         setUser(userDataFromSession);
+        addUser();
+
+
+        async function getFavorites(user_id: string) {
+          const { data, error } = await supabase
+            .from('user_lists')
+            .select('*')
+            .eq('user_id', user_id)
+            .eq('list_name', 'Favorites')
+            .single();
+
+          if (error) {
+            return null;
+          }
+
+          return data;
+        }
+        async function getFavoritesWithRetry(user_id: string, delay = 500) {
+          while (true) {
+            const data = await getFavorites(user_id);
+
+            if (data) {
+              devLog("Favorites found:", data);
+              const favorites: FavoritesListType = {
+                listId: data.list_id,
+                listName: data.list_name,
+                listItems: data.list_items ? data.list_items : []
+              };
+              setFavorites(favorites);
+              return data;
+            }
+
+            devLog("Favorites not found, retrying in", delay, "ms...");
+            await new Promise((resolve) => setTimeout(resolve, delay));
+          }
+        }
+        getFavoritesWithRetry(session.user.id)
       }
     });
-
-    // toast.error('Welcome back!', {
-    //   duration: 4000,
-    //   position: 'top-center',
-    //   icon: null,
-    //   style: {
-    //     background: 'red',
-    //     color: 'white',
-    //     borderRadius: '50px',
-    //     fontSize: '16px',
-    //   }
-    // });
 
     const {
       data: { subscription },
@@ -77,7 +114,7 @@ const App: React.FC = () => {
     }
   }, [toastInfo]);
 
-  devLog(session);
+  devLog("Session", session);
 
   return (
     <>

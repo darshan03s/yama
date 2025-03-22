@@ -64,9 +64,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
             if (exists) {
                 return {
                     ...prev,
-                    listItems: prev.listItems.map((item) =>
-                        item.id === id ? { ...item, isFavorited: !item.isFavorited } : item
-                    )
+                    listItems: prev.listItems.filter((item) => item.id !== id)
                 };
             } else {
                 return {

@@ -25,7 +25,7 @@ const Home: React.FC = () => {
     const { favorites, toggleFavorite } = useRootContext();
 
 
-    devLog(favorites);
+    devLog("Local favorites",favorites);
 
     useEffect(() => {
         let url = tmdbBaseUrl;
@@ -80,7 +80,7 @@ const Home: React.FC = () => {
             devLog(`Fetching page ${page + 1}`);
             const fetchData = async () => {
                 const resJson = await fetchListFromTMDB(url, tmdbOptions, page + 1);
-                devLog(resJson);
+                devLog("Fetched page", resJson);
                 setData((prev) => ({ ...prev, [category]: [...prev[category], ...resJson.results] }));
                 setCurrentList(prev => [...prev, ...resJson.results]);
                 setPageInfo((prev) => ({ ...prev, [category]: { page: page + 1, totalPages: resJson.total_pages } }));

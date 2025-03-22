@@ -1,4 +1,5 @@
 import supabase from "./supabaseClient";
+import { devLog } from "./utils";
 
 export const signInWithGoogle = async () => {
     try {
@@ -6,9 +7,9 @@ export const signInWithGoogle = async () => {
             provider: 'google',
         });
         if (error) throw error;
-        console.log(data);
+        devLog("Google sign in", data);
     } catch (error) {
-        console.error(error);
+        devLog("Error while signin with google", error);
     }
 }
 
@@ -17,6 +18,6 @@ export const signOut = async () => {
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
     } catch (error) {
-        console.error(error);
+        devLog("Error while signing out", error);
     }
 }
