@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
-import { About, Home, Login, Movie, Profile, SearchResults, TV } from './pages';
+import { About, Home, Login, Movie, Profile, SearchResults, TV, Favorites } from './pages';
 
 import { Header, Navbar, Searchbar } from './components'
 
@@ -132,6 +132,11 @@ const App: React.FC = () => {
         <Route path='/profile' element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        } />
+        <Route path='/profile/favorites' element={
+          <ProtectedRoute>
+            <Favorites />
           </ProtectedRoute>
         } />
       </Routes>

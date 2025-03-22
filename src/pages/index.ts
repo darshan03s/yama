@@ -5,3 +5,4 @@ export { default as Movie } from "./Movie";
 export { default as Profile } from "./Profile";
 export { default as SearchResults } from "./SearchResults";
 export { default as TV } from "./TV";
+export { default as Favorites } from "./Favorites";
