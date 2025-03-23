@@ -8,6 +8,7 @@ import { MediaCard, Wrapper, Spinner } from "../components"
 import { useInView } from "react-intersection-observer";
 import { devLog, fetchListFromTMDB, tmdbBaseUrl, tmdbOptions } from "../utils";
 import { ArrowUp } from "lucide-react";
+import GridWrapper from "../components/GridWrapper";
 
 const Home: React.FC = () => {
     const location = useLocation();
@@ -25,7 +26,7 @@ const Home: React.FC = () => {
     const { favorites, toggleFavorite } = useRootContext();
 
 
-    devLog("Local favorites",favorites);
+    devLog("Local favorites", favorites);
 
     useEffect(() => {
         let url = tmdbBaseUrl;
@@ -98,11 +99,11 @@ const Home: React.FC = () => {
         <>
             <Wrapper>
                 <h1 className="text-xl sm:text-3xl text-amber-500 py-1 mb-2 text-center sm:text-left px-4 xl:px-0">{categoryString}</h1>
-                <div className="media-cards grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2 px-4 xl:px-0">
+                <GridWrapper>
                     {currentList.length === 0 ? <Loading /> : currentList.map((item: MovieType | TYShowType, index: number) => (
                         <MediaCard item={item} category={category} key={index} isFavorited={favorites.listItems.find(f => f.id === item.id)?.isFavorited ?? false} toggleFavorite={toggleFavorite} />
                     ))}
-                </div>
+                </GridWrapper>
                 <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
                     <Spinner />
                 </div>

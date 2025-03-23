@@ -12,9 +12,12 @@ import { FavoritesListType, UserType } from './types'
 import toast, { Toaster } from 'react-hot-toast';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { session } = useRootContext();
+  const { session, fetchingUser } = useRootContext();
 
   if (!session) {
+    if (fetchingUser) {
+      return <div className='text-center text-amber-500'>Loading...</div>;
+    }
     return <Navigate to="/login" replace />;
   }
 
@@ -23,9 +26,10 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 const App: React.FC = () => {
   const location = useLocation();
-  const { setSession, session, setUser, toastInfo, setFavorites } = useRootContext();
+  const { setSession, session, setUser, toastInfo, setFavorites, setFetchingUser } = useRootContext();
   const isLogin: boolean = location.pathname === '/login';
-  const isProfile: boolean = location.pathname === '/profile';
+  const isAbout: boolean = location.pathname === '/about';
+  const isProfile: boolean = location.pathname.startsWith('/profile');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -93,9 +97,13 @@ const App: React.FC = () => {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      setFetchingUser(false);
     });
 
-    return () => subscription.unsubscribe();
+
+    return () => {
+      subscription.unsubscribe()
+    };
   }, []);
 
   useEffect(() => {
@@ -120,7 +128,7 @@ const App: React.FC = () => {
     <>
       <Header />
       {!isLogin && !isProfile && <Navbar />}
-      {!isLogin && !isProfile && <Searchbar />}
+      {!isLogin && !isProfile && !isAbout && <Searchbar />}
       <Toaster />
       <Routes>
         <Route path='/' element={<Home />} />

@@ -34,6 +34,10 @@ interface ContextType {
     toastInfo: Record<string, string>;
     setToastInfo: React.Dispatch<React.SetStateAction<Record<string, string>>>;
     showToast: (message: string, type: 'success' | 'error') => void;
+    fetchedFavorites: any[];
+    setFetchedFavorites: React.Dispatch<React.SetStateAction<any[]>>;
+    fetchingUser: boolean;
+    setFetchingUser: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Context = createContext<ContextType | undefined>(undefined);
@@ -56,6 +60,8 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     });
 
     const [toastInfo, setToastInfo] = useState<Record<string, string>>({});
+    const [fetchedFavorites, setFetchedFavorites] = useState<any[]>([]);
+    const [fetchingUser, setFetchingUser] = useState(true);
 
     const toggleFavorite = (id: number, category: string) => {
         setFavorites((prev) => {
@@ -69,7 +75,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
             } else {
                 return {
                     ...prev,
-                    listItems: [...prev.listItems, { id, category, isFavorited: true, createdAt: new Date().toISOString() }]
+                    listItems: [{ id, category, isFavorited: true, createdAt: new Date().toISOString() }, ...prev.listItems]
                 };
             }
         });
@@ -83,7 +89,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     };
 
     return (
-        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo, user, setUser, session, setSession, favorites, setFavorites, toggleFavorite, toastInfo, setToastInfo, showToast }}>
+        <Context.Provider value={{ data, setData, fetchedMovies, setFetchedMovies, fetchedTVShows, setFetchedTVShows, pageInfo, setPageInfo, user, setUser, session, setSession, favorites, setFavorites, toggleFavorite, toastInfo, setToastInfo, showToast, fetchedFavorites, setFetchedFavorites, fetchingUser, setFetchingUser }}>
             {children}
         </Context.Provider>
     );
