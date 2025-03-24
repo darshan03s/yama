@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRootContext } from '../Context';
 import { MediaCard, Wrapper } from '../components';
-import { devLog, tmdbBaseUrl } from '../utils';
+import { tmdbBaseUrl } from '../utils';
 import GridWrapper from '../components/GridWrapper';
 
 const Favorites: React.FC = () => {
@@ -33,9 +33,6 @@ const Favorites: React.FC = () => {
             setFetchedFavorites([]);
         }
     }, [favorites.listItems]);
-
-    devLog("Favorites", favorites);
-    devLog("Fetched favorites", fetchedFavorites);
 
     return (
         <Wrapper>

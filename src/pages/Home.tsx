@@ -25,9 +25,6 @@ const Home: React.FC = () => {
     const { ref, inView } = useInView();
     const { favorites, toggleFavorite } = useRootContext();
 
-
-    devLog("Local favorites", favorites);
-
     useEffect(() => {
         let url = tmdbBaseUrl;
         if (pageInfo[category]) {

@@ -7,7 +7,7 @@ import { Header, Navbar, Searchbar } from './components'
 
 import supabase from './supabaseClient'
 import { useRootContext } from './Context'
-import { devLog } from './utils'
+import { addFavorites, devLog } from './utils'
 import { FavoritesListType, UserType } from './types'
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -26,7 +26,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 const App: React.FC = () => {
   const location = useLocation();
-  const { setSession, session, setUser, toastInfo, setFavorites, setFetchingUser } = useRootContext();
+  const { setSession, session, setUser, toastInfo, setFavorites, setFetchingUser, favorites } = useRootContext();
   const isLogin: boolean = location.pathname === '/login';
   const isAbout: boolean = location.pathname === '/about';
   const isProfile: boolean = location.pathname.startsWith('/profile');
@@ -75,7 +75,6 @@ const App: React.FC = () => {
             const data = await getFavorites(user_id);
 
             if (data) {
-              devLog("Favorites found:", data);
               const favorites: FavoritesListType = {
                 listId: data.list_id,
                 listName: data.list_name,
@@ -121,6 +120,18 @@ const App: React.FC = () => {
       }
     }
   }, [toastInfo]);
+
+  useEffect(() => {
+    const delay = 2000;
+    const handler = setTimeout(() => {
+      devLog("Change in favorites, logging after", delay, "ms", favorites);
+      if (session?.user.id) {
+        addFavorites(favorites, session?.user.id!);
+        devLog("Sent favorites to database");
+      }
+    }, delay);
+    return () => clearTimeout(handler);
+  }, [favorites]);
 
   devLog("Session", session);
 
