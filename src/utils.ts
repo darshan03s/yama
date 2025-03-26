@@ -1,6 +1,3 @@
-import supabase from "./supabaseClient";
-import { FavoritesListType } from "./types";
-
 export const devLog = (...args: any[]) => {
     if (import.meta.env.DEV) {
         console.log(...args);
@@ -41,20 +38,6 @@ export const fetchSearchFromTMDB = async (url: string, options: RequestInit, que
     const response = await fetch(`${url}?query=${query}&page=${page}`, options);
     const resJson = await response.json();
     return resJson;
-}
-
-export const addFavorites = async (favorites: FavoritesListType, user_id: string) => {
-    const { error: updateError } = await supabase
-        .from('user_lists')
-        .update({ list_items: favorites.listItems })
-        .eq('user_id', user_id)
-        .eq('list_id', favorites.listId);
-
-    if (updateError) {
-        devLog("Error updating favorites", updateError);
-    } else {
-        devLog("Favorites updated successfully");
-    }
 }
 
 export function formatMoney(num: number): string {

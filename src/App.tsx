@@ -7,9 +7,10 @@ import { Header, Navbar, Searchbar } from './components'
 
 import supabase from './supabaseClient'
 import { useRootContext } from './Context'
-import { addFavorites, devLog } from './utils'
-import { FavoritesListType, UserType } from './types'
+import { devLog } from './utils'
+import { UserType } from './types'
 import toast, { Toaster } from 'react-hot-toast';
+import { addUser, getFavoritesWithRetry, getSession, addFavorites } from './supabaseUtils';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { session, fetchingUser } = useRootContext();
@@ -26,13 +27,13 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 const App: React.FC = () => {
   const location = useLocation();
-  const { setSession, session, setUser, toastInfo, setFavorites, setFetchingUser, favorites } = useRootContext();
+  const { setSession, session, setUser, toastInfo, setFavorites, setFetchingUser, favorites, setFetchedFavorites } = useRootContext();
   const isLogin: boolean = location.pathname === '/login';
   const isAbout: boolean = location.pathname === '/about';
   const isProfile: boolean = location.pathname.startsWith('/profile');
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    getSession().then((session) => {
       setSession(session);
       if (session) {
         const userDataFromSession: UserType = {
@@ -41,67 +42,30 @@ const App: React.FC = () => {
           email: session.user.email!,
           avatar_url: session.user.user_metadata.avatar_url || session.user.user_metadata.picture,
         }
-        const addUser = async () => {
-          const { data, error } = await supabase
-            .from("users")
-            .upsert([userDataFromSession], { onConflict: "id" });
 
-          if (error) {
-            devLog("Error adding user", error);
-          } else {
-            devLog("User added", data);
-          }
-        }
         setUser(userDataFromSession);
-        addUser();
+        addUser(userDataFromSession);
 
-
-        async function getFavorites(user_id: string) {
-          const { data, error } = await supabase
-            .from('user_lists')
-            .select('*')
-            .eq('user_id', user_id)
-            .eq('list_name', 'Favorites')
-            .single();
-
-          if (error) {
-            return null;
-          }
-
-          return data;
-        }
-        async function getFavoritesWithRetry(user_id: string, delay = 500) {
-          while (true) {
-            const data = await getFavorites(user_id);
-
-            if (data) {
-              const favorites: FavoritesListType = {
-                listId: data.list_id,
-                listName: data.list_name,
-                listItems: data.list_items ? data.list_items : []
-              };
-              setFavorites(favorites);
-              return data;
-            }
-
-            devLog("Favorites not found, retrying in", delay, "ms...");
-            await new Promise((resolve) => setTimeout(resolve, delay));
-          }
-        }
-        getFavoritesWithRetry(session.user.id)
+        getFavoritesWithRetry(session.user.id).then((favorites) => {
+          setFavorites(favorites);
+        });
       }
     });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (!session) {
+        setFavorites(favs => ({
+          ...favs,
+          listItems: []
+        }));
+        setFetchedFavorites([]);
+      }
       setFetchingUser(false);
     });
 
-
     return () => {
-      subscription.unsubscribe()
+      subscription.unsubscribe();
     };
   }, []);
 
