@@ -13,6 +13,7 @@ interface MediaCardProps {
 }
 
 const MediaCard: React.FC<MediaCardProps> = ({ item, category, isFavorited, toggleFavorite }) => {
+    const isMovieCategory = ["movie", "now_playing", "upcoming", "top_rated"].includes(category);
     const { session, showToast } = useRootContext();
     const getRating = () => {
         return Math.trunc(item.vote_average * 10) / 10;
@@ -58,8 +59,16 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category, isFavorited, togg
             </div>
 
             <div className="info p-1">
-                <h2 className='text-center text-lg truncate font-medium'>{category === "movie" ? (item as MovieType).title : (item as TYShowType).name}</h2>
-                <div className="text-center text-xs">{category === "movie" ? (item as MovieType).release_date : (item as TYShowType).first_air_date}</div>
+                <h2 className='text-center text-lg truncate font-medium'>
+                    {isMovieCategory
+                        ? (item as MovieType).title
+                        : (item as TYShowType).name}
+                </h2>
+                <div className="text-center text-xs">
+                    {isMovieCategory
+                        ? (item as MovieType).release_date
+                        : (item as TYShowType).first_air_date}
+                </div>
             </div>
         </div>
     )
