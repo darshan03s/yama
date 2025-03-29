@@ -1,34 +1,18 @@
 import React, { useEffect } from 'react';
 import { useRootContext } from '../Context';
 import { MediaCard, Wrapper } from '../components';
-import { tmdbBaseUrl } from '../utils';
+import { fetchFavorites } from '../utils';
 import GridWrapper from '../components/GridWrapper';
 
 const Favorites: React.FC = () => {
     const { favorites, fetchedFavorites, setFetchedFavorites, toggleFavorite } = useRootContext();
 
     useEffect(() => {
-        async function fetchFavorites() {
-            const fetchedData = await Promise.all(
-                favorites.listItems.map(async (item) => {
-                    const url = `${tmdbBaseUrl}/${item.category}/${item.id}?api_key=${import.meta.env.VITE_TMDB_API}`;
-                    const res = await fetch(url);
-                    if (!res.ok) return null;
-
-                    const data = await res.json();
-                    return { category: item.category, data };
-                })
-            );
-
-            const updatedFetchedFavorites = fetchedData.filter(item =>
-                item !== null && favorites.listItems.some(f => f.id === item.data.id)
-            );
-
-            setFetchedFavorites(updatedFetchedFavorites);
-        }
 
         if (favorites.listItems.length > 0) {
-            fetchFavorites();
+            fetchFavorites(favorites).then((fetchedFavorites) => {
+                setFetchedFavorites(fetchedFavorites);
+            });
         } else {
             setFetchedFavorites([]);
         }

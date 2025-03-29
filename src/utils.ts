@@ -1,3 +1,5 @@
+import { FavoritesListType } from "./types";
+
 export const devLog = (...args: any[]) => {
     if (import.meta.env.DEV) {
         console.log(...args);
@@ -38,6 +40,25 @@ export const fetchSearchFromTMDB = async (url: string, options: RequestInit, que
     const response = await fetch(`${url}?query=${query}&page=${page}`, options);
     const resJson = await response.json();
     return resJson;
+}
+
+export const fetchFavorites = async (favorites: FavoritesListType): Promise<any> => {
+    const fetchedData = await Promise.all(
+        favorites.listItems.map(async (item) => {
+            const url = `${tmdbBaseUrl}/${item.category}/${item.id}`;
+            const res = await fetch(url, tmdbOptions);
+            if (!res.ok) return null;
+
+            const data = await res.json();
+            return { category: item.category, data };
+        })
+    );
+
+    const updatedFetchedFavorites = fetchedData.filter(item =>
+        item !== null && favorites.listItems.some(f => f.id === item.data.id)
+    );
+
+    return updatedFetchedFavorites;
 }
 
 export function formatMoney(num: number): string {
