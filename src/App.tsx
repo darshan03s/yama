@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
 import { About, Home, Login, Movie, Profile, SearchResults, TV, Favorites } from './pages';
@@ -31,26 +31,29 @@ const App: React.FC = () => {
   const isLogin: boolean = location.pathname === '/login';
   const isAbout: boolean = location.pathname === '/about';
   const isProfile: boolean = location.pathname.startsWith('/profile');
+  const [fetchedSession, setFetchedSession] = useState(false);
 
   useEffect(() => {
-    getSession().then((session) => {
-      setSession(session);
-      if (session) {
-        const userDataFromSession: UserType = {
-          id: session.user.id,
-          username: session.user.user_metadata.full_name,
-          email: session.user.email!,
-          avatar_url: session.user.user_metadata.avatar_url || session.user.user_metadata.picture,
+    if (!fetchedSession) {
+      getSession().then((session) => {
+        setSession(session);
+        if (session) {
+          const userDataFromSession: UserType = {
+            id: session.user.id,
+            username: session.user.user_metadata.full_name,
+            email: session.user.email!,
+            avatar_url: session.user.user_metadata.avatar_url || session.user.user_metadata.picture,
+          }
+
+          setUser(userDataFromSession);
+          addUser(userDataFromSession);
+
+          getFavoritesWithRetry(session.user.id).then((favorites) => {
+            setFavorites(favorites);
+          });
         }
-
-        setUser(userDataFromSession);
-        addUser(userDataFromSession);
-
-        getFavoritesWithRetry(session.user.id).then((favorites) => {
-          setFavorites(favorites);
-        });
-      }
-    });
+      });
+    }
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -97,7 +100,13 @@ const App: React.FC = () => {
     return () => clearTimeout(handler);
   }, [favorites]);
 
-  devLog("Session", session);
+  useEffect(() => {
+    devLog("Session", session);
+    if (session) {
+      setFetchedSession(true);
+    }
+  }, [session]);
+
 
   return (
     <>
