@@ -1,9 +1,9 @@
 import { Heart, Star } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { tmdbImageUrl } from '../utils'
+import { posterPlaceholder, tmdbImageUrl } from '../utils'
 import { MovieType, TYShowType } from '../types'
-import { useRootContext } from '../Context'
+import { useRootContext } from '../context/Context'
 
 interface MediaCardProps {
     item: MovieType | TYShowType
@@ -29,7 +29,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category, isFavorited, togg
     }
 
     const navigate = useNavigate();
-    let imgSrc = (item.poster_path || item.backdrop_path) ? `${tmdbImageUrl}${item.poster_path || item.backdrop_path}` : "https://placehold.co/620x1000?text=No+Poster";
+    let imgSrc = (item.poster_path || item.backdrop_path) ? `${tmdbImageUrl}${item.poster_path || item.backdrop_path}` : posterPlaceholder;
     return (
         <div
             className="media-card max-w-[360px] sm:max-w-2xl bg-amber-200 rounded-md hover:scale-105 transition-all duration-300 cursor-pointer"

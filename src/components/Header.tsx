@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { House, Info, LogOut, LucideIcon, UserRound } from "lucide-react"
-import { useRootContext } from '../Context'
+import { useRootContext } from '../context/Context'
 import { signOut } from '../auth'
 
 interface MenuItemProps {

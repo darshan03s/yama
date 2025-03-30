@@ -5,7 +5,7 @@ import { useInView } from "react-intersection-observer";
 import { MediaCard, Wrapper, Spinner } from "../components"
 import { Loading } from '../components/MediaDetails';
 import { ArrowUp } from 'lucide-react';
-import { useRootContext } from '../Context';
+import { useRootContext } from '../context/Context';
 import { MovieType, TYShowType } from '../types';
 
 const SearchResults: React.FC = () => {
@@ -19,15 +19,26 @@ const SearchResults: React.FC = () => {
     const url = `${tmdbBaseUrl}/search/${category}`;
     const query = searchParams.get('query');
     const { favorites, toggleFavorite } = useRootContext();
+    const [fetchingSearchResults, setFetchingSearchResults] = useState<boolean | null>(null);
 
     useEffect(() => {
         const fetchResults = async () => {
+            setFetchingSearchResults(true);
             const data = await fetchSearchFromTMDB(url, tmdbOptions, query!, 1);
             setResultsList(data.results);
             setTotalPages(data.total_pages);
+            setFetchingSearchResults(false);
         }
         fetchResults();
     }, [query, category]);
+
+    useEffect(() => {
+        if (!fetchingSearchResults && resultsList.length == 0) {
+            setShowSpinner(false);
+        } else {
+            setShowSpinner(true);
+        }
+    }, [resultsList])
 
     useEffect(() => {
         if (!url) return;
@@ -53,9 +64,10 @@ const SearchResults: React.FC = () => {
             <Wrapper>
                 <h1 className="text-xl sm:text-3xl text-amber-500 py-1 mb-2 text-center sm:text-left px-4 xl:px-0">Search results for {query} in {category === "movie" ? "Movies" : "TV Shows"}</h1>
                 <div className="media-cards grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2 px-4 xl:px-0">
-                    {resultsList.length === 0 ? <Loading /> : resultsList.map((item: MovieType | TYShowType, index: number) => (
+                    {resultsList.length === 0 && fetchingSearchResults ? <Loading /> : resultsList.map((item: MovieType | TYShowType, index: number) => (
                         <MediaCard item={item} category={category!} key={index} isFavorited={favorites.listItems.find(f => f.id === item.id)?.isFavorited ?? false} toggleFavorite={toggleFavorite} />
                     ))}
+                    {!fetchingSearchResults && resultsList.length == 0 ? <p>No results found</p> : null}
                 </div>
                 <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
                     <Spinner />

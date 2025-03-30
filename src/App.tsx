@@ -6,11 +6,12 @@ import { About, Home, Login, Movie, Profile, SearchResults, TV, Favorites } from
 import { Header, Navbar, Searchbar } from './components'
 
 import supabase from './supabaseClient'
-import { useRootContext } from './Context'
+import { useRootContext } from './context/Context'
 import { devLog } from './utils'
 import { UserType } from './types'
 import toast, { Toaster } from 'react-hot-toast';
 import { addUser, getFavoritesWithRetry, getSession, addFavorites } from './supabaseUtils';
+import { TVShowContextProvider } from './context/TVShowContext';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { session, fetchingUser } = useRootContext();
@@ -118,7 +119,11 @@ const App: React.FC = () => {
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/movie/:id' element={<Movie />} />
-        <Route path='/tv/:id' element={<TV />} />
+        <Route path='/tv/:id' element={
+          <TVShowContextProvider>
+            <TV />
+          </TVShowContextProvider>
+        } />
         <Route path='/search' element={<SearchResults />} />
         <Route path='/login' element={<Login />} />
         <Route path='/profile' element={

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useRootContext } from '../Context';
+import { useRootContext } from '../context/Context';
 import { MediaCard, Wrapper } from '../components';
 import { fetchFavorites } from '../utils';
 import GridWrapper from '../components/GridWrapper';

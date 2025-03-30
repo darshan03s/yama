@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useRootContext } from '../Context';
+import { useRootContext } from '../context/Context';
 import { signInWithGoogle } from '../auth';
 
 const Login: React.FC = () => {

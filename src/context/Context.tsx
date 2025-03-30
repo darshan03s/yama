@@ -1,6 +1,6 @@
 import { Session } from "@supabase/supabase-js";
 import { createContext, ReactNode, useContext, useState } from "react";
-import { FavoritesListType, MovieType, TYShowType, UserType } from "./types";
+import { FavoritesListType, MovieType, TYShowType, UserType } from "../types";
 import { v4 as uuidv4 } from "uuid";
 
 interface ContextType {

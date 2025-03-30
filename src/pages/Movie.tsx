@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Wrapper } from '../components'
 import { useParams } from 'react-router-dom'
-import { useRootContext } from '../Context';
+import { useRootContext } from '../context/Context';
 import { tmdbBaseUrl, formatMoney, tmdbOptions, fetchMovieFromTMDB, tmdbImageUrl } from '../utils';
 import { MovieType } from '../types';
 import { Info, Loading, OverViewHeading, Poster, Title } from '../components/MediaDetails';

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Loading: React.FC = () => {
     return (
-        <div className="w-full flex items-center justify-center mt-2">Loading...</div>
+        <div className="w-full flex items-center justify-start mt-2">Loading...</div>
     );
 }
 
@@ -21,38 +21,40 @@ interface PosterProps {
     src: string;
     alt: string;
     rating: number;
+    externalLink: string | undefined;
 }
 
-export const Poster: React.FC<PosterProps> = ({ src, alt, rating }) => {
+export const Poster: React.FC<PosterProps> = ({ src, alt, rating, externalLink }) => {
     return (
-        <div className="movie-left w-full flex items-center justify-center sm:justify-center md:justify-start md:w-[300px] md:pl-2 md:col-span-1">
+        <div className="movie-left w-full flex items-start justify-center sm:justify-center md:justify-start md:w-[300px] md:pl-2 md:col-span-1">
             <div className="relative">
                 <img
                     src={src}
                     alt={alt}
                     className='w-[300px] sm:w-[300px] md:w-[250px] xl:w-[300px]'
                 />
-                <span className='absolute top-2 right-2 bg-amber-300 text-xs p-1 rounded flex gap-1 items-center'>
-                    <Star className='size-3.5' /> {Math.trunc(rating * 10) / 10}
-                </span>
+                <div className="absolute top-2 right-2 flex gap-1">
+                    {externalLink && (
+                        <span className='bg-amber-300 text-xs p-1 rounded flex gap-1 items-center cursor-pointer'>
+                            <Link to={externalLink} target="_blank" >
+                                <ExternalLink className='size-3.5' />
+                            </Link>
+                        </span>
+                    )}
+                    <span className='bg-amber-300 text-xs p-1 rounded flex gap-1 items-center'>
+                        <Star className='size-3.5' /> {Math.trunc(rating * 10) / 10}
+                    </span>
+                </div>
             </div>
         </div>
     )
 }
 
-interface OverViewHeadingProps {
-    externalLink: string | undefined;
-}
 
-export const OverViewHeading: React.FC<OverViewHeadingProps> = ({ externalLink }) => {
+export const OverViewHeading: React.FC = () => {
     return (
         <h2 className="text-lg text-amber-500 font-bold flex items-center gap-1">
             Overview
-            {externalLink && (
-                <span className='text-xs p-1 rounded'>
-                    <Link to={externalLink} target="_blank" ><ExternalLink className='size-3.5' /></Link>
-                </span>
-            )}
         </h2>
     )
 }

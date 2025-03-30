@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+button {
+  @apply cursor-pointer;
+}
+
+select{
+  --webkit-scrollbar: none;
+}

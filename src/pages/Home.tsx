@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useRootContext } from "../Context";
+import { useRootContext } from "../context/Context";
 import { Category, MovieType, TYShowType } from "../types";
 import { Loading } from "../components/MediaDetails";
 import { MediaCard, Wrapper, Spinner } from "../components"

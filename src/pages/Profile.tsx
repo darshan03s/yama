@@ -1,6 +1,6 @@
 import React from 'react'
 import { Wrapper } from '../components'
-import { useRootContext } from '../Context';
+import { useRootContext } from '../context/Context';
 import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

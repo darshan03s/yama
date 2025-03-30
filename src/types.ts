@@ -33,6 +33,17 @@ export type TYShowType = {
     genres?: { id: number; name: string }[];
     original_language?: string;
     original_name?: string;
+    cast: any[];
+    crew: any[];
+    seasons: {
+        [key: number]: SeasonType
+    };
+};
+
+export type SeasonType = {
+    id: number;
+    overview: string;
+    episodes: any[];
 };
 
 export type UserType = {

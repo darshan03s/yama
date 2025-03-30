@@ -10,6 +10,10 @@ export const tmdbBaseUrl: string = "https://api.themoviedb.org/3";
 
 export const tmdbImageUrl: string = "https://image.tmdb.org/t/p/original";
 
+export const posterPlaceholder = "https://placehold.co/620x1000?text=No+Poster";
+
+export const stillPlaceholder = "https://placehold.co/180x100?text=No+Image";
+
 export const tmdbOptions: RequestInit = {
     method: "GET",
     headers: {
@@ -30,6 +34,12 @@ export const fetchTVShowFromTMDB = async (url: string, options: RequestInit): Pr
     return resJson;
 }
 
+export const fetchTvShowCredits = async (url: string, options: RequestInit): Promise<any> => {
+    const response = await fetch(url, options);
+    const resJson = await response.json();
+    return resJson;
+}
+
 export const fetchListFromTMDB = async (url: string, options: RequestInit, page: number): Promise<any> => {
     const response = await fetch(`${url}&page=${page}`, options);
     const resJson = await response.json();
@@ -38,6 +48,12 @@ export const fetchListFromTMDB = async (url: string, options: RequestInit, page:
 
 export const fetchSearchFromTMDB = async (url: string, options: RequestInit, query: string, page: number): Promise<any> => {
     const response = await fetch(`${url}?query=${query}&page=${page}`, options);
+    const resJson = await response.json();
+    return resJson;
+}
+
+export const fetchTVShowSeasonFromTMDB = async (url: string, options: RequestInit): Promise<any> => {
+    const response = await fetch(url, options);
     const resJson = await response.json();
     return resJson;
 }
@@ -69,4 +85,13 @@ export function formatMoney(num: number): string {
         return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
     }
     return num.toString();
+}
+
+export const formatTime = (timeInMinutes: number): string => {
+    const hours = Math.floor(timeInMinutes / 60);
+    const minutes = timeInMinutes % 60;
+    if (hours === 0) {
+        return `${minutes}m`;
+    }
+    return `${hours}h ${minutes}m`;
 }
