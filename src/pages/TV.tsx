@@ -53,6 +53,10 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
 
     }, [selectedSeason]);
 
+    useEffect(() => {
+        devLog(activeTab);
+    }, [activeTab]);
+
     return (
         <>
             <div className="seasons-header flex gap-2">
@@ -125,30 +129,66 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
                 </div>
             }
 
-            {activeTab === "videos" &&
-                fetchedTVShows[id]?.videos.length === 0 ? <div className="">No Videos</div> :
-                <div className="videos flex flex-col gap-2 mb-2">
-                    {fetchedTVShows[id]?.videos?.map((video, index) => (
-                        <div key={index} className="video">
-                            <iframe
-                                src={`https://www.youtube.com/embed/${video.key}`}
-                                title="YouTube video player"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                                className='aspect-video w-full rounded-lg'
-                            />
-                        </div>
-                    ))}
-                </div>
-            }
+            {activeTab === "videos" ? (
+                fetchedTVShows[id]?.videos.length === 0 ? (
+                    <div>No Videos</div>
+                ) : (
+                    <div className="videos flex flex-col gap-2 mb-2">
+                        {fetchedTVShows[id]?.videos?.map((video, index) => (
+                            <div key={index} className="video">
+                                <iframe
+                                    src={`https://www.youtube.com/embed/${video.key}`}
+                                    title="YouTube video player"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowFullScreen
+                                    className='aspect-video w-full rounded-lg'
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )
+            ) : null}
+
         </>
     )
 }
 
-const CastAndCrew: React.FC<{ tv: TYShowType }> = ({ tv }) => {
+const Cast: React.FC<{ id: string }> = ({ id }) => {
+    const { fetchedTVShows } = useRootContext();
+    const tv = fetchedTVShows[id];
     return (
         <>
-            <h2 className="">Cast & Crew</h2>
+            <div className="cast grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {tv?.cast.map((castDetails, index) => (
+                    <>
+                        <div key={index} className={`person flex flex-col items-center ${!castDetails.profile_path ? "justify-center" : ""}`}>
+                            <img src={castDetails.profile_path ? `${tmdbImageUrl}${castDetails.profile_path}` : stillPlaceholder} alt={castDetails.name} className="rounded-lg" loading="lazy" />
+                            <p className="text-sm font-bold text-amber-500 text-center">{castDetails.name}</p>
+                            <p className="text-sm text-center">{castDetails?.roles?.[0]?.character} ({castDetails.known_for_department})</p>
+                        </div>
+                    </>
+                ))}
+            </div>
+        </>
+    )
+}
+
+const Crew: React.FC<{ id: string }> = ({ id }) => {
+    const { fetchedTVShows } = useRootContext();
+    const tv = fetchedTVShows[id];
+    return (
+        <>
+            <div className="cast grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {tv?.crew.map((crewDetails, index) => (
+                    <>
+                        <div key={index} className={`person flex flex-col items-center ${!crewDetails.profile_path ? "justify-center" : ""}`}>
+                            <img src={crewDetails.profile_path ? `${tmdbImageUrl}${crewDetails.profile_path}` : stillPlaceholder} alt={crewDetails.name} className="rounded-lg" loading="lazy" />
+                            <p className="text-sm font-bold text-amber-500 text-center">{crewDetails.name}</p>
+                            <p className="text-sm text-center">{crewDetails?.roles?.[0]?.character} ({crewDetails.department || crewDetails.known_for_department}, {crewDetails.jobs.map((job: any) => job.job).join(", ")})</p>
+                        </div>
+                    </>
+                ))}
+            </div>
         </>
     )
 }
@@ -199,14 +239,24 @@ const TV: React.FC = () => {
                         <div className="movie-right md:col-span-2 mt-2 md:mt-0 md:px-4 md:w-full px-4 py-4 md:py-0 space-y-3">
 
                             <div className="tabs bg-amber-200 rounded-xl px-1 sm:px-2 py-2 flex gap-1 text-xs sm:text-base">
-                                <button className={`px-4 py-1 rounded-lg ${activeTab === "overview" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("overview")}>Overview</button>
-                                <button className={`px-4 py-1 rounded-lg ${activeTab === "seasons" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("seasons")}>Seasons</button>
-                                <button className={`px-4 py-1 rounded-lg ${activeTab === "cast_and_crew" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("cast_and_crew")}>Cast & Crew</button>
+                                <button className={`px-4 py-1 rounded-lg ${activeTab === "overview" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("overview")}>
+                                    Overview
+                                </button>
+                                <button className={`px-4 py-1 rounded-lg ${activeTab === "seasons" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("seasons")}>
+                                    Seasons
+                                </button>
+                                <button className={`px-4 py-1 rounded-lg ${activeTab === "cast" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("cast")}>
+                                    Cast
+                                </button>
+                                <button className={`px-4 py-1 rounded-lg ${activeTab === "crew" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("crew")}>
+                                    Crew
+                                </button>
                             </div>
 
                             {activeTab === "overview" && <Overview tv={tv} />}
                             {activeTab === "seasons" && <Seasons id={id!} />}
-                            {activeTab === "cast_and_crew" && <CastAndCrew tv={tv} />}
+                            {activeTab === "cast" && <Cast id={id!} />}
+                            {activeTab === "crew" && <Crew id={id!} />}
 
                         </div>
                     </div>
