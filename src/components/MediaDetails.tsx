@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Loading: React.FC = () => {
     return (
-        <div className="w-full flex items-center justify-start mt-2">Loading...</div>
+        <div className="w-full flex items-center justify-start mt-2 px-4 sm:px-0">Loading...</div>
     );
 }
 

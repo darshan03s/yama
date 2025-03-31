@@ -38,6 +38,7 @@ export type TYShowType = {
     seasons: {
         [key: number]: SeasonType
     };
+    videos: any[];
 };
 
 export type SeasonType = {

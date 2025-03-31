@@ -58,6 +58,12 @@ export const fetchTVShowSeasonFromTMDB = async (url: string, options: RequestIni
     return resJson;
 }
 
+export const fetchTVShowVideosFromTMDB = async (url: string, options: RequestInit): Promise<any> => {
+    const response = await fetch(url, options);
+    const resJson = await response.json();
+    return resJson;
+}
+
 export const fetchFavorites = async (favorites: FavoritesListType): Promise<any> => {
     const fetchedData = await Promise.all(
         favorites.listItems.map(async (item) => {

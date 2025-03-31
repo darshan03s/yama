@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Wrapper } from '../components'
 import { useParams } from 'react-router-dom'
 import { useRootContext } from '../context/Context';
-import { devLog, fetchTvShowCredits, fetchTVShowFromTMDB, fetchTVShowSeasonFromTMDB, formatTime, stillPlaceholder, tmdbBaseUrl, tmdbImageUrl, tmdbOptions } from '../utils';
+import { devLog, fetchTvShowCredits, fetchTVShowFromTMDB, fetchTVShowSeasonFromTMDB, fetchTVShowVideosFromTMDB, formatTime, stillPlaceholder, tmdbBaseUrl, tmdbImageUrl, tmdbOptions } from '../utils';
 import { Info, Loading, Poster, Title } from '../components/MediaDetails';
 import { TYShowType } from '../types';
 import { useTVShowContext } from '../context/TVShowContext';
@@ -11,7 +11,6 @@ import { Star } from 'lucide-react';
 const Overview: React.FC<{ tv: TYShowType }> = ({ tv }) => {
     return (
         <>
-            {/* <OverViewHeading /> */}
             <Info value={tv.overview || "N/A"} />
             <Info label="First air date" value={tv.first_air_date || "N/A"} />
             <Info label="Last air date" value={tv.last_air_date || "N/A"} />
@@ -27,14 +26,14 @@ const Overview: React.FC<{ tv: TYShowType }> = ({ tv }) => {
 const Seasons: React.FC<{ id: string }> = ({ id }) => {
     const { selectedSeason, setSelectedSeason } = useTVShowContext();
     const { fetchedTVShows, setFetchedTVShows } = useRootContext();
-    const [fetchingSeason, setFetchingSeason] = useState(false);
     const tv = fetchedTVShows[id];
+    const [activeTab, setActiveTab] = useState<string>("seasons_details");
 
     useEffect(() => {
         devLog("Selected season", selectedSeason);
+        const tvShowVideosUrl = `${tmdbBaseUrl}/tv/${id}/season/${selectedSeason}/videos`;
         if (tv?.seasons[selectedSeason]) return;
         const seasonUrl = `${tmdbBaseUrl}/tv/${id}/season/${selectedSeason}`;
-        setFetchingSeason(true);
         fetchTVShowSeasonFromTMDB(seasonUrl, tmdbOptions).then((seasonsDetails) => {
             devLog(`Season details for season ${selectedSeason}`, seasonsDetails);
             const updatedTVShow = {
@@ -44,21 +43,26 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
                     [selectedSeason]: seasonsDetails
                 }
             };
-            setFetchedTVShows((prev) => ({ ...prev, [id]: updatedTVShow }));
+            fetchTVShowVideosFromTMDB(tvShowVideosUrl, tmdbOptions).then((videos) => {
+                devLog(`Videos for season ${selectedSeason}`, videos.results);
+                const ytVideos = videos.results.filter((video: any) => video.site === "YouTube").reverse();
+                updatedTVShow["videos"] = [...ytVideos];
+                setFetchedTVShows((prev) => ({ ...prev, [id]: updatedTVShow }));
+            });
         });
-        setFetchingSeason(false);
 
     }, [selectedSeason]);
 
     return (
         <>
-            <div className="seasons-header flex justify-between">
-                <div className="select-season bg-amber-200 rounded-lg flex items-center px-2">
+            <div className="seasons-header flex gap-2">
+                <div className="select-season bg-amber-200 rounded-lg flex items-center px-2 cursor-pointer">
                     <select
                         name="seasons"
                         id="seasons-select"
-                        className='px-4 py-1 not-last-of-type:border-none outline-none appearance-none w-full'
+                        className='px-4 py-1 not-last-of-type:border-none outline-none appearance-none w-full cursor-pointer'
                         onChange={(e) => setSelectedSeason(Number(e.target.value))}
+                        onClick={() => setActiveTab("seasons_details")}
                         value={selectedSeason}
                     >
                         {
@@ -74,9 +78,14 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
                     </select>
                 </div>
 
+                <button className='bg-amber-200 rounded-lg flex items-center px-2 py-1 cursor-pointer'
+                    onClick={() => setActiveTab("videos")}
+                >Videos</button>
+
             </div>
 
-            {fetchingSeason ? <Loading /> :
+            {!fetchedTVShows[id].seasons[selectedSeason] ? <Loading /> :
+                activeTab === "seasons_details" &&
                 <div className="season-details mb-2">
                     <p>{tv?.seasons[selectedSeason]?.overview}</p>
                     <div className="episodes mt-2 flex flex-col gap-2">
@@ -115,6 +124,23 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
                     </div>
                 </div>
             }
+
+            {activeTab === "videos" &&
+                fetchedTVShows[id]?.videos.length === 0 ? <div className="">No Videos</div> :
+                <div className="videos flex flex-col gap-2 mb-2">
+                    {fetchedTVShows[id]?.videos?.map((video, index) => (
+                        <div key={index} className="video">
+                            <iframe
+                                src={`https://www.youtube.com/embed/${video.key}`}
+                                title="YouTube video player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                className='aspect-video w-full rounded-lg'
+                            />
+                        </div>
+                    ))}
+                </div>
+            }
         </>
     )
 }
@@ -150,7 +176,7 @@ const TV: React.FC = () => {
                             cast: castAndCrewDetails.cast,
                             crew: castAndCrewDetails.crew,
                             seasons: []
-                        }
+                        };
                         setSelectedSeason(Number(tvJson.number_of_seasons) || 1);
                         setTv(tvJson);
                         setFetchedTVShows((prev) => ({ ...prev, [id]: tvJson }));
