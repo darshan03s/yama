@@ -45,7 +45,7 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
             };
             fetchTVShowVideosFromTMDB(tvShowVideosUrl, tmdbOptions).then((videos) => {
                 devLog(`Videos for season ${selectedSeason}`, videos.results);
-                const ytVideos = videos.results.filter((video: any) => video.site === "YouTube").reverse();
+                const ytVideos = videos.results.filter((video: any) => video.site === "YouTube").reverse().filter((video: any) => video.type === "Trailer" || video.type === "Teaser" || video.name.includes("Trailer") || video.name.includes("Teaser"));
                 updatedTVShow["videos"] = [...ytVideos];
                 setFetchedTVShows((prev) => ({ ...prev, [id]: updatedTVShow }));
             });

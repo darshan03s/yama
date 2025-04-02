@@ -15,6 +15,10 @@ export type MovieType = {
     original_title?: string;
     budget?: number;
     revenue?: number;
+    videos: any[];
+    cast: any[];
+    crew: any[];
+
 };
 
 export type TYShowType = {
