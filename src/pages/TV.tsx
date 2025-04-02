@@ -84,7 +84,9 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
 
                 <button className='bg-amber-200 rounded-lg flex items-center px-2 py-1 cursor-pointer'
                     onClick={() => setActiveTab("videos")}
-                >Videos</button>
+                >
+                    Videos
+                </button>
 
             </div>
 
@@ -198,7 +200,8 @@ const TV: React.FC = () => {
     const [tv, setTv] = useState<TYShowType | null>(null);
     const { fetchedTVShows, setFetchedTVShows } = useRootContext();
     const [activeTab, setActiveTab] = useState<string>("overview");
-    const { setSelectedSeason } = useTVShowContext();
+    const { setSelectedSeason, selectedSeason } = useTVShowContext();
+    const [posterUrl, setPosterUrl] = useState<string>("");
 
     useEffect(() => {
         if (!id) return;
@@ -227,7 +230,21 @@ const TV: React.FC = () => {
 
     useEffect(() => {
         devLog("Fetched TV shows", fetchedTVShows);
-    }, [fetchedTVShows])
+    }, [fetchedTVShows]);
+
+    useEffect(() => {
+        devLog("Setting poster url...");
+        if (activeTab === "seasons" && fetchedTVShows?.[id!]?.seasons?.[selectedSeason]) {
+            const posterUrl = fetchedTVShows?.[id!]?.seasons?.[selectedSeason]?.poster_path
+                ? `${tmdbImageUrl}${fetchedTVShows[id!].seasons[selectedSeason].poster_path}`
+                : `${tmdbImageUrl}${tv?.poster_path || tv?.backdrop_path}`;
+
+            devLog(`Poster url for season ${selectedSeason}`, posterUrl);
+            setPosterUrl(posterUrl);
+        } else {
+            setPosterUrl(`${tmdbImageUrl}${(tv?.poster_path || tv?.backdrop_path)}`);
+        }
+    }, [activeTab, selectedSeason, fetchedTVShows]);
 
     return (
         <Wrapper>
@@ -235,7 +252,7 @@ const TV: React.FC = () => {
                 <>
                     <Title title={tv.name} />
                     <div className="movie w-full md:grid md:grid-cols-3">
-                        <Poster src={`${tmdbImageUrl}${tv.poster_path || tv.backdrop_path}`} alt={tv.title} rating={tv.vote_average} externalLink={tv.homepage} />
+                        <Poster src={posterUrl} alt={tv.title} rating={tv.vote_average} externalLink={tv.homepage} />
                         <div className="movie-right md:col-span-2 mt-2 md:mt-0 md:px-4 md:w-full px-4 py-4 md:py-0 space-y-3">
 
                             <div className="tabs bg-amber-200 rounded-xl px-1 sm:px-2 py-2 flex gap-1 text-xs sm:text-base">

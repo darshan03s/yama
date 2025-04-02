@@ -44,6 +44,7 @@ export type TYShowType = {
 export type SeasonType = {
     id: number;
     overview: string;
+    poster_path?: string;
     episodes: any[];
 };
 
