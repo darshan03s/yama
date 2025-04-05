@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Wrapper } from '../components'
 import { useParams } from 'react-router-dom'
 import { useRootContext } from '../context/Context';
-import { tmdbBaseUrl, formatMoney, tmdbOptions, fetchMovieFromTMDB, tmdbImageUrl, devLog, fetchMovieVideosFromTMDB, fetchMovieCreditsFromTMDB, stillPlaceholder } from '../utils';
+import { tmdbBaseUrl, formatMoney, fetchMovieFromTMDB, tmdbImageUrl, devLog, fetchMovieVideosFromTMDB, fetchMovieCreditsFromTMDB, stillPlaceholder } from '../utils';
 import { MovieType } from '../types';
 import { Info, Loading, Poster, Title } from '../components/MediaDetails';
 
@@ -88,10 +88,10 @@ const Movie: React.FC = () => {
     useEffect(() => {
         if (!id) return;
         const fetchMovie = async () => {
-            fetchMovieFromTMDB(url, tmdbOptions).then((resJson: MovieType) => {
-                fetchMovieVideosFromTMDB(movieVideosUrl, tmdbOptions).then((videos: any) => {
+            fetchMovieFromTMDB(url).then((resJson: MovieType) => {
+                fetchMovieVideosFromTMDB(movieVideosUrl).then((videos: any) => {
                     resJson.videos = videos.results.filter((video: any) => video.site === "YouTube").reverse().filter((video: any) => video.type === "Trailer" || video.name.includes("Trailer"));
-                    fetchMovieCreditsFromTMDB(movieCreditsUrl, tmdbOptions).then((credits: any) => {
+                    fetchMovieCreditsFromTMDB(movieCreditsUrl).then((credits: any) => {
                         devLog("Credits", credits);
                         resJson.cast = credits.cast;
                         resJson.crew = credits.crew;

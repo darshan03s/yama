@@ -14,64 +14,125 @@ export const posterPlaceholder = "https://placehold.co/620x1000?text=No+Poster";
 
 export const stillPlaceholder = "https://placehold.co/180x100?text=No+Image";
 
-export const tmdbOptions: RequestInit = {
-    method: "GET",
-    headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
-    },
-};
+const serverUrl = import.meta.env.DEV ? import.meta.env.VITE_LOCAL_SERVER_URL : import.meta.env.VITE_SERVER_URL;
+// const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-export const fetchMovieFromTMDB = async (url: string, options: RequestInit): Promise<any> => {
-    const response = await fetch(url, options);
+export const fetchListFromTMDB = async (url: string, page: number): Promise<any> => {
+    const newUrl = `${url}&page=${page}`;
+    const response = await fetch(`${serverUrl}/fetch-from-tmdb`, {
+        method: "POST",
+        headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: newUrl }),
+    });
     const resJson = await response.json();
     return resJson;
 }
 
-export const fetchTVShowFromTMDB = async (url: string, options: RequestInit): Promise<any> => {
-    const response = await fetch(url, options);
+export const fetchSearchFromTMDB = async (url: string, query: string, page: number): Promise<any> => {
+    const newUrl = `${url}?query=${query}&page=${page}`;
+    const response = await fetch(`${serverUrl}/fetch-from-tmdb`, {
+        method: "POST",
+        headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: newUrl }),
+    });
     const resJson = await response.json();
     return resJson;
 }
 
-export const fetchTvShowCredits = async (url: string, options: RequestInit): Promise<any> => {
-    const response = await fetch(url, options);
+export const fetchMovieFromTMDB = async (url: string): Promise<any> => {
+    const response = await fetch(`${serverUrl}/fetch-from-tmdb`, {
+        method: "POST",
+        headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: url }),
+    });
     const resJson = await response.json();
     return resJson;
 }
 
-export const fetchListFromTMDB = async (url: string, options: RequestInit, page: number): Promise<any> => {
-    const response = await fetch(`${url}&page=${page}`, options);
+export const fetchMovieVideosFromTMDB = async (url: string): Promise<any> => {
+    const response = await fetch(`${serverUrl}/fetch-from-tmdb`, {
+        method: "POST",
+        headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: url }),
+    });
     const resJson = await response.json();
     return resJson;
 }
 
-export const fetchSearchFromTMDB = async (url: string, options: RequestInit, query: string, page: number): Promise<any> => {
-    const response = await fetch(`${url}?query=${query}&page=${page}`, options);
+export const fetchMovieCreditsFromTMDB = async (url: string): Promise<any> => {
+    const response = await fetch(`${serverUrl}/fetch-from-tmdb`, {
+        method: "POST",
+        headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: url }),
+    });
     const resJson = await response.json();
     return resJson;
 }
 
-export const fetchTVShowSeasonFromTMDB = async (url: string, options: RequestInit): Promise<any> => {
-    const response = await fetch(url, options);
+export const fetchTVShowFromTMDB = async (url: string): Promise<any> => {
+    const response = await fetch(`${serverUrl}/fetch-from-tmdb`, {
+        method: "POST",
+        headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: url }),
+    });
     const resJson = await response.json();
     return resJson;
 }
 
-export const fetchTVShowVideosFromTMDB = async (url: string, options: RequestInit): Promise<any> => {
-    const response = await fetch(url, options);
+export const fetchTvShowCredits = async (url: string): Promise<any> => {
+    const response = await fetch(`${serverUrl}/fetch-from-tmdb`, {
+        method: "POST",
+        headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: url }),
+    });
     const resJson = await response.json();
     return resJson;
 }
 
-export const fetchMovieVideosFromTMDB = async (url: string, options: RequestInit): Promise<any> => {
-    const response = await fetch(url, options);
+
+export const fetchTVShowSeasonFromTMDB = async (url: string): Promise<any> => {
+    const response = await fetch(`${serverUrl}/fetch-from-tmdb`, {
+        method: "POST",
+        headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: url }),
+    });
     const resJson = await response.json();
     return resJson;
 }
 
-export const fetchMovieCreditsFromTMDB = async (url: string, options: RequestInit): Promise<any> => {
-    const response = await fetch(url, options);
+export const fetchTVShowVideosFromTMDB = async (url: string): Promise<any> => {
+    const response = await fetch(`${serverUrl}/fetch-from-tmdb`, {
+        method: "POST",
+        headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: url }),
+    });
     const resJson = await response.json();
     return resJson;
 }
@@ -80,11 +141,17 @@ export const fetchFavorites = async (favorites: FavoritesListType): Promise<any>
     const fetchedData = await Promise.all(
         favorites.listItems.map(async (item) => {
             const url = `${tmdbBaseUrl}/${item.category}/${item.id}`;
-            const res = await fetch(url, tmdbOptions);
-            if (!res.ok) return null;
-
-            const data = await res.json();
-            return { category: item.category, data };
+            const response = await fetch(`${serverUrl}/fetch-from-tmdb`, {
+                method: "POST",
+                headers: {
+                    accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ url: url }),
+            });
+            if (!response.ok) return null;
+            const resJson = await response.json();
+            return { category: item.category, data: resJson };
         })
     );
 

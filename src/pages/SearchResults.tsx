@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { fetchSearchFromTMDB, tmdbBaseUrl, tmdbOptions } from '../utils';
+import { fetchSearchFromTMDB, tmdbBaseUrl} from '../utils';
 import { useInView } from "react-intersection-observer";
 import { MediaCard, Wrapper, Spinner } from "../components"
 import { Loading } from '../components/MediaDetails';
@@ -24,7 +24,7 @@ const SearchResults: React.FC = () => {
     useEffect(() => {
         const fetchResults = async () => {
             setFetchingSearchResults(true);
-            const data = await fetchSearchFromTMDB(url, tmdbOptions, query!, 1);
+            const data = await fetchSearchFromTMDB(url, query!, 1);
             setResultsList(data.results);
             setTotalPages(data.total_pages);
             setFetchingSearchResults(false);
@@ -48,7 +48,7 @@ const SearchResults: React.FC = () => {
         };
         if (inView) {
             const fetchData = async () => {
-                const resJson = await fetchSearchFromTMDB(url, tmdbOptions, query!, page + 1);
+                const resJson = await fetchSearchFromTMDB(url, query!, page + 1);
                 setResultsList(prev => [...prev, ...resJson.results]);
                 setPage(prev => prev + 1);
             };

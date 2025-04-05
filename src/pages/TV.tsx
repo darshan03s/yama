@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Wrapper } from '../components'
 import { useParams } from 'react-router-dom'
 import { useRootContext } from '../context/Context';
-import { devLog, fetchTvShowCredits, fetchTVShowFromTMDB, fetchTVShowSeasonFromTMDB, fetchTVShowVideosFromTMDB, formatTime, stillPlaceholder, tmdbBaseUrl, tmdbImageUrl, tmdbOptions } from '../utils';
+import { devLog, fetchTvShowCredits, fetchTVShowFromTMDB, fetchTVShowSeasonFromTMDB, fetchTVShowVideosFromTMDB, formatTime, stillPlaceholder, tmdbBaseUrl, tmdbImageUrl} from '../utils';
 import { Info, Loading, Poster, Title } from '../components/MediaDetails';
 import { TYShowType } from '../types';
 import { useTVShowContext } from '../context/TVShowContext';
@@ -34,7 +34,7 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
         const tvShowVideosUrl = `${tmdbBaseUrl}/tv/${id}/season/${selectedSeason}/videos`;
         if (tv?.seasons[selectedSeason]) return;
         const seasonUrl = `${tmdbBaseUrl}/tv/${id}/season/${selectedSeason}`;
-        fetchTVShowSeasonFromTMDB(seasonUrl, tmdbOptions).then((seasonsDetails) => {
+        fetchTVShowSeasonFromTMDB(seasonUrl).then((seasonsDetails) => {
             devLog(`Season details for season ${selectedSeason}`, seasonsDetails);
             const updatedTVShow = {
                 ...fetchedTVShows[id],
@@ -43,7 +43,7 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
                     [selectedSeason]: seasonsDetails
                 }
             };
-            fetchTVShowVideosFromTMDB(tvShowVideosUrl, tmdbOptions).then((videos) => {
+            fetchTVShowVideosFromTMDB(tvShowVideosUrl).then((videos) => {
                 devLog(`Videos for season ${selectedSeason}`, videos.results);
                 const ytVideos = videos.results.filter((video: any) => video.site === "YouTube").reverse().filter((video: any) => video.type === "Trailer" || video.type === "Teaser" || video.name.includes("Trailer") || video.name.includes("Teaser"));
                 updatedTVShow["videos"] = [...ytVideos];
@@ -211,9 +211,9 @@ const TV: React.FC = () => {
         if (fetchedTVShows[id as string]) {
             setTv(fetchedTVShows[id as string]);
         } else {
-            fetchTVShowFromTMDB(tvShowDetailsUrl, tmdbOptions)
+            fetchTVShowFromTMDB(tvShowDetailsUrl)
                 .then((tvShowDetails) => {
-                    fetchTvShowCredits(tvShowCreditsUrl, tmdbOptions).then((castAndCrewDetails) => {
+                    fetchTvShowCredits(tvShowCreditsUrl).then((castAndCrewDetails) => {
                         const tvJson = {
                             ...tvShowDetails,
                             cast: castAndCrewDetails.cast,

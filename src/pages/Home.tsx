@@ -6,7 +6,7 @@ import { Loading } from "../components/MediaDetails";
 import { MediaCard, Wrapper, Spinner } from "../components"
 
 import { useInView } from "react-intersection-observer";
-import { devLog, fetchListFromTMDB, tmdbBaseUrl, tmdbOptions } from "../utils";
+import { devLog, fetchListFromTMDB, tmdbBaseUrl } from "../utils";
 import { ArrowUp } from "lucide-react";
 import GridWrapper from "../components/GridWrapper";
 
@@ -52,7 +52,7 @@ const Home: React.FC = () => {
         setUrl(url);
 
         const fetchData = async () => {
-            const resJson = await fetchListFromTMDB(url, tmdbOptions, 1);
+            const resJson = await fetchListFromTMDB(url, 1);
             setData((prev) => ({ ...prev, [category]: resJson.results }));
             setCurrentList(resJson.results);
             setTotalPages(resJson.total_pages);
@@ -77,7 +77,7 @@ const Home: React.FC = () => {
         if (inView) {
             devLog(`Fetching page ${page + 1}`);
             const fetchData = async () => {
-                const resJson = await fetchListFromTMDB(url, tmdbOptions, page + 1);
+                const resJson = await fetchListFromTMDB(url, page + 1);
                 devLog("Fetched page", resJson);
                 setData((prev) => ({ ...prev, [category]: [...prev[category], ...resJson.results] }));
                 setCurrentList(prev => [...prev, ...resJson.results]);
