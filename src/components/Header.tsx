@@ -18,7 +18,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ name, to, Icon }) => {
 
 const Logo: React.FC = () => {
     return (
-        <Link to={'/'} className='text-sm md:text-lg font-bold bg-amber-300 p-1 rounded-md'>YAMDb</Link>
+        <Link to={'/'} className='text-sm md:text-lg font-bold bg-amber-300 p-1 rounded-md'>YAMA</Link>
     )
 }
 

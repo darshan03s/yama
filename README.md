@@ -1,4 +1,4 @@
-# Yet Another Movie Database (YAMDb)
+# Yet Another Movie App (YAMA)
 
 Yet another movie app
 
@@ -39,4 +39,4 @@ pnpm run preview
 
 ## Backend repository
 
-https://github.com/darshan03s/yamdb-backend
+https://github.com/darshan03s/yama-backend
