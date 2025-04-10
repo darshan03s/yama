@@ -6,7 +6,7 @@ interface GridWrapperProps {
 
 const GridWrapper: React.FC<GridWrapperProps> = ({ children }) => {
     return (
-        <div className="media-cards grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2 px-4 xl:px-0">
+        <div className="media-cards grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2 px-4 xl:px-0">
             {children}
         </div>
     )

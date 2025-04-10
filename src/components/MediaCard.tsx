@@ -59,7 +59,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category, isFavorited, togg
             </div>
 
             <div className="info p-1">
-                <h2 className='text-center text-lg truncate font-medium'>
+                <h2 className='text-center text-sm truncate font-medium'>
                     {isMovieCategory
                         ? (item as MovieType).title
                         : (item as TYShowType).name}
