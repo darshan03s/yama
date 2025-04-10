@@ -3,6 +3,7 @@ import { useRootContext } from '../context/Context';
 import { MediaCard, Wrapper } from '../components';
 import { fetchFavorites } from '../utils';
 import GridWrapper from '../components/GridWrapper';
+import { Loading } from '../components/MediaDetails';
 
 const Favorites: React.FC = () => {
     const { favorites, fetchedFavorites, setFetchedFavorites, toggleFavorite } = useRootContext();
@@ -24,9 +25,10 @@ const Favorites: React.FC = () => {
                 {favorites.listName}
             </h1>
             <GridWrapper>
-                {fetchedFavorites.map((item, index) => (
-                    <MediaCard item={item.data} category={item.category} key={index} isFavorited={favorites.listItems.find(f => f.id === item.data.id)?.isFavorited ?? false} toggleFavorite={toggleFavorite} />
-                ))}
+                {fetchedFavorites.length === 0 ? <Loading /> :
+                    fetchedFavorites.map((item, index) => (
+                        <MediaCard item={item.data} category={item.category} key={index} isFavorited={favorites.listItems.find(f => f.id === item.data.id)?.isFavorited ?? false} toggleFavorite={toggleFavorite} />
+                    ))}
             </GridWrapper>
         </Wrapper>
     );
