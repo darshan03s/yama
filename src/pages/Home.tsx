@@ -56,8 +56,8 @@ const Home: React.FC = () => {
             setData((prev) => ({ ...prev, [category]: resJson.results }));
             setCurrentList(resJson.results);
             setTotalPages(resJson.total_pages);
-            setShowSpinner(true);
             setPage(1);
+            devLog("Page after category change: ", page);
         };
 
         if (!data[category] || data[category].length === 0) {
@@ -69,7 +69,6 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         if (!url) return;
-        devLog(`Current page: ${page}`);
         if (page > totalPages) {
             setShowSpinner(false);
             return;
@@ -91,6 +90,10 @@ const Home: React.FC = () => {
         }
     }, [inView]);
 
+    useEffect(() => {
+        devLog("Current page:", page);
+    }, [page]);
+
 
     return (
         <>
@@ -101,9 +104,11 @@ const Home: React.FC = () => {
                         <MediaCard item={item} category={category} key={index} isFavorited={favorites.listItems.find(f => f.id === item.id)?.isFavorited ?? false} toggleFavorite={toggleFavorite} />
                     ))}
                 </GridWrapper>
-                <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
-                    <Spinner />
-                </div>
+                {currentList.length === 0 ? null :
+                    <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
+                        <Spinner />
+                    </div>
+                }
             </Wrapper>
 
             <div className="go-to-top">

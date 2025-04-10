@@ -28,6 +28,7 @@ const SearchResults: React.FC = () => {
             const data = await fetchSearchFromTMDB(url, query!, 1);
             setResultsList(data.results);
             setTotalPages(data.total_pages);
+            setPage(1);
             setFetchingSearchResults(false);
         }
         fetchResults();
@@ -70,9 +71,11 @@ const SearchResults: React.FC = () => {
                     ))}
                     {!fetchingSearchResults && resultsList.length == 0 ? <p>No results found</p> : null}
                 </GridWrapper>
-                <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
-                    <Spinner />
-                </div>
+                {resultsList.length === 0 ? null :
+                    <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
+                        <Spinner />
+                    </div>
+                }
             </Wrapper>
 
             <div className="go-to-top">
