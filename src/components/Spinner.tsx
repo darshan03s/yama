@@ -10,7 +10,7 @@ const Spinner = (props: React.SVGProps<SVGSVGElement>) => {
             style={{
                 shapeRendering: "auto",
                 display: "block",
-                background: "#fff",
+                // background: "#fff",
             }}
             viewBox="0 0 100 100"
             {...props}

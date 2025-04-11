@@ -12,7 +12,7 @@ const NavItem: React.FC<NavItemProps> = ({ name, to, isActive }) => {
     return (
         <Link to={to} className="flex items-center">
             <span
-                className={`sm:inline font-medium hover:text-black/80 transition-colors duration-100 
+                className={`sm:inline font-medium hover:text-black/80 transition-colors duration-100 dark:text-black 
                 ${isActive ? "underline decoration-amber-800 decoration-2 underline-offset-4" : ""}`}
             >
                 {name}

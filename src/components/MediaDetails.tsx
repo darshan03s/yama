@@ -35,13 +35,13 @@ export const Poster: React.FC<PosterProps> = ({ src, alt, rating, externalLink }
                 />
                 <div className="absolute top-2 right-2 flex gap-1">
                     {externalLink && (
-                        <span className='bg-amber-300 text-xs p-1 rounded flex gap-1 items-center cursor-pointer'>
+                        <span className='bg-amber-300 text-xs p-1 rounded flex gap-1 items-center cursor-pointer dark:text-black'>
                             <Link to={externalLink} target="_blank" >
                                 <ExternalLink className='size-3.5' />
                             </Link>
                         </span>
                     )}
-                    <span className='bg-amber-300 text-xs p-1 rounded flex gap-1 items-center'>
+                    <span className='bg-amber-300 text-xs p-1 rounded flex gap-1 items-center dark:text-black'>
                         <Star className='size-3.5' /> {Math.trunc(rating * 10) / 10}
                     </span>
                 </div>

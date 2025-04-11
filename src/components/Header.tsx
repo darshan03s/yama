@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { House, Info, LogOut, LucideIcon, UserRound } from "lucide-react"
+import { House, Info, LogOut, LucideIcon, Moon, Sun, UserRound } from "lucide-react"
 import { useRootContext } from '../context/Context'
 import { signOut } from '../auth'
+import { useDarkMode } from '../context/DarkModeProvider'
 
 interface MenuItemProps {
     name: string
@@ -18,7 +19,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ name, to, Icon }) => {
 
 const Logo: React.FC = () => {
     return (
-        <Link to={'/'} className='text-sm md:text-lg font-bold bg-amber-300 p-1 rounded-md'>YAMA</Link>
+        <Link to={'/'} className='text-sm md:text-lg font-bold bg-amber-300 p-1 rounded-md dark:text-black'>YAMA</Link>
     )
 }
 
@@ -27,6 +28,7 @@ const Header: React.FC = () => {
     const navigate = useNavigate();
     const [showAccountOptions, setShowAccountOptions] = useState<boolean>(false);
     const popupRef = useRef<HTMLDivElement>(null);
+    const { darkModeToggle, darkModeEnabled } = useDarkMode();
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -88,6 +90,9 @@ const Header: React.FC = () => {
                             Login
                         </button>
                     </>}
+                <button onClick={darkModeToggle} className={`size-8 md:size-9 p-2 cursor-pointer rounded-full ${darkModeEnabled ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                    {darkModeEnabled ? <Sun className='w-full h-full' /> : <Moon className='w-full h-full' />}
+                </button>
             </div>
         </header>
     )

@@ -105,7 +105,7 @@ const Home: React.FC = () => {
                     ))}
                 </GridWrapper>
                 {currentList.length === 0 ? null :
-                    <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"}`}>
+                    <div ref={ref} className={`${showSpinner ? "flex justify-center" : "hidden"} dark:bg-black`}>
                         <Spinner />
                     </div>
                 }

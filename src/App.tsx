@@ -108,9 +108,8 @@ const App: React.FC = () => {
     }
   }, [session]);
 
-
   return (
-    <>
+    <div className='dark:bg-black dark:text-white min-h-[100vh]'>
       <Header />
       {!isLogin && !isProfile && <Navbar />}
       {!isLogin && !isProfile && !isAbout && <Searchbar />}
@@ -137,7 +136,7 @@ const App: React.FC = () => {
           </ProtectedRoute>
         } />
       </Routes>
-    </>
+    </div>
   )
 }
 

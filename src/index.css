@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 button {
   @apply cursor-pointer;
 }
 
-select{
+select {
   --webkit-scrollbar: none;
 }

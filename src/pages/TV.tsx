@@ -60,7 +60,7 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
     return (
         <>
             <div className="seasons-header flex gap-2">
-                <div className="select-season bg-amber-200 rounded-lg flex items-center px-2 cursor-pointer">
+                <div className="select-season bg-amber-300 rounded-lg flex items-center px-2 cursor-pointer dark:text-black">
                     <select
                         name="seasons"
                         id="seasons-select"
@@ -82,7 +82,7 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
                     </select>
                 </div>
 
-                <button className='bg-amber-200 rounded-lg flex items-center px-2 py-1 cursor-pointer'
+                <button className='bg-amber-300 rounded-lg flex items-center px-2 py-1 cursor-pointer dark:text-black'
                     onClick={() => setActiveTab("videos")}
                 >
                     Videos
@@ -98,7 +98,7 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
                         <h2 className="text-amber-500 font-bold text-lg">Episodes</h2>
 
                         {tv?.seasons[selectedSeason]?.episodes?.map((episode) => (
-                            <div key={episode.id} className='episode flex gap-2 flex-1 bg-amber-100 p-2 rounded-md'>
+                            <div key={episode.id} className='episode flex gap-2 flex-1 bg-[#FFF4B7] p-2 rounded-md'>
                                 <div className="episode-still min-w-[150px] aspect-video sm:min-w-[180px] h-[100px]">
                                     <img src={episode.still_path ? `${tmdbImageUrl}${episode.still_path}` : stillPlaceholder} alt={episode.name}
                                         className='w-full h-full rounded-sm'
@@ -122,7 +122,7 @@ const Seasons: React.FC<{ id: string }> = ({ id }) => {
                                             <Star className='size-3.5' fill='white' /> {Math.trunc(episode.vote_average * 10) / 10}
                                         </span>
                                     </div>
-                                    <p className='line-clamp-2 text-xs'>{episode.overview}</p>
+                                    <p className='line-clamp-2 text-xs dark:text-black'>{episode.overview}</p>
                                 </div>
                             </div>
                         ))}
@@ -255,17 +255,17 @@ const TV: React.FC = () => {
                         <Poster src={posterUrl} alt={tv.title} rating={tv.vote_average} externalLink={tv.homepage} />
                         <div className="movie-right md:col-span-2 mt-2 md:mt-0 md:px-4 md:w-full px-4 py-4 md:py-0 space-y-3">
 
-                            <div className="tabs bg-amber-200 rounded-xl px-1 sm:px-2 py-2 flex gap-1 text-xs sm:text-base">
-                                <button className={`px-4 py-1 rounded-lg ${activeTab === "overview" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("overview")}>
+                            <div className="tabs bg-amber-300 rounded-xl px-1 sm:px-2 py-2 flex gap-1 text-xs sm:text-base">
+                                <button className={`px-4 py-1 rounded-lg dark:text-black ${activeTab === "overview" ? "bg-amber-500" : ""}`} onClick={() => setActiveTab("overview")}>
                                     Overview
                                 </button>
-                                <button className={`px-4 py-1 rounded-lg ${activeTab === "seasons" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("seasons")}>
+                                <button className={`px-4 py-1 rounded-lg dark:text-black ${activeTab === "seasons" ? "bg-amber-500" : ""}`} onClick={() => setActiveTab("seasons")}>
                                     Seasons
                                 </button>
-                                <button className={`px-4 py-1 rounded-lg ${activeTab === "cast" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("cast")}>
+                                <button className={`px-4 py-1 rounded-lg dark:text-black ${activeTab === "cast" ? "bg-amber-500" : ""}`} onClick={() => setActiveTab("cast")}>
                                     Cast
                                 </button>
-                                <button className={`px-4 py-1 rounded-lg ${activeTab === "crew" ? "bg-amber-300" : ""}`} onClick={() => setActiveTab("crew")}>
+                                <button className={`px-4 py-1 rounded-lg dark:text-black ${activeTab === "crew" ? "bg-amber-500" : ""}`} onClick={() => setActiveTab("crew")}>
                                     Crew
                                 </button>
                             </div>

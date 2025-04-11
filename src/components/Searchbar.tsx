@@ -40,7 +40,7 @@ const Searchbar: React.FC = () => {
                     }
                 }}
             />
-            <button className="bg-amber-300 text-white p-2 h-10 rounded-r-full cursor-pointer" onClick={handleSearch}><Search /></button>
+            <button className="bg-amber-300 text-white p-2 h-10 rounded-r-full cursor-pointer dark:text-black" onClick={handleSearch}><Search /></button>
         </Wrapper>
     )
 }

@@ -32,7 +32,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category, isFavorited, togg
     let imgSrc = (item.poster_path || item.backdrop_path) ? `${tmdbImageUrl}${item.poster_path || item.backdrop_path}` : posterPlaceholder;
     return (
         <div
-            className="media-card max-w-[360px] sm:max-w-2xl bg-amber-200 rounded-md hover:scale-105 transition-all duration-300 cursor-pointer"
+            className="media-card max-w-[360px] sm:max-w-2xl bg-amber-300 rounded-md hover:scale-105 transition-all duration-300 cursor-pointer"
             onClick={() => navigate(`/${category === "tv" ? "tv" : "movie"}/${item.id}`)}
         >
             <div key={item.id} className='relative'>
@@ -51,7 +51,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category, isFavorited, togg
                         }>
                         <Heart className='size-3.5' fill={isFavorited ? 'black' : 'transparent'} stroke='black' />
                     </span>
-                    <span className='bg-amber-300 text-xs rounded flex gap-1 px-1 items-center mr-2' title='Rating'>
+                    <span className='bg-amber-300 text-xs rounded flex gap-1 px-1 items-center mr-2 dark:text-black' title='Rating'>
                         <Star className='size-3.5' /> {getRating()}
                     </span>
                 </div>
@@ -59,7 +59,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, category, isFavorited, togg
             </div>
 
             <div className="info p-1">
-                <h2 className='text-center text-sm sm:text-base truncate font-medium'>
+                <h2 className='text-center text-sm sm:text-base truncate font-medium dark:text-black'>
                     {isMovieCategory
                         ? (item as MovieType).title
                         : (item as TYShowType).name}
