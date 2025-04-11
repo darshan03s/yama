@@ -68,13 +68,13 @@ const Header: React.FC = () => {
                                 <div ref={popupRef} className="account-options absolute z-20 bg-white shadow-lg rounded-md right-2 top-10 w-[150px] flex flex-col gap-2 py-1 px-1">
                                     <button
                                         onClick={() => navigate('/profile')}
-                                        className="account-options-item hover:bg-gray-200 rounded-md h-8 flex items-center justify-center gap-2 transition-colors duration-100 cursor-pointer"
+                                        className="account-options-item hover:bg-gray-200 rounded-md h-8 flex items-center justify-center gap-2 transition-colors duration-100 cursor-pointer dark:text-black"
                                     >
                                         <UserRound className='size-4' /> Profile
                                     </button>
                                     <button
                                         onClick={handleLogOut}
-                                        className="account-options-item hover:bg-red-100 text-red-500 rounded-md h-8 flex items-center justify-center gap-2 transition-colors duration-100 cursor-pointer"
+                                        className="account-options-item hover:bg-red-100 text-red-500 rounded-md h-8 flex items-center justify-center gap-2 transition-colors duration-100 cursor-pointer dark:text-red-500 "
                                     >
                                         <LogOut className='size-4' /> Logout
                                     </button>
