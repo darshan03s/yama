@@ -4,6 +4,8 @@ Yet another movie app
 
 ---
 
+[![Watch the demo](https://res.cloudinary.com/dqzusd5rw/image/upload/v1756637198/Screenshot_2025-08-28_185732_zqvcs6.png)](https://res.cloudinary.com/dqzusd5rw/video/upload/v1756637208/demo_vckedb.mp4)
+
 ## Tech Stack
 
 - **Frontend**: React (TypeScript), Vite, Tailwind CSS
